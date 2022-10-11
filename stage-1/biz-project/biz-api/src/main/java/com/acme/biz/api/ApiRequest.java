@@ -14,20 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.acme.biz.data.repository;
-
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+package com.acme.biz.api;
 
 /**
- * Spring Data Commons 会帮助接口生成动态代理对象 实现 Repository 透明化（SQL、NoSQL）
- * Spring Data Commons 支持自定义存储引擎
+ * API 请求对象
+ *
+ * @param <T> T 模型对象类型
  * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
- * @see CrudRepository
  * @since
  */
-@Repository
-public interface UserRepository extends CrudRepository {
+@Deprecated
+public class ApiRequest<T> extends HttpApi<T> {
 
-    // CRUD
 }
