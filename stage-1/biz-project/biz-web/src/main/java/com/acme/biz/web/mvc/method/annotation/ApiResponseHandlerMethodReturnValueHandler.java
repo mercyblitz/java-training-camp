@@ -47,10 +47,14 @@ public class ApiResponseHandlerMethodReturnValueHandler implements HandlerMethod
     }
 
     @Override
-    public void handleReturnValue(Object returnValue, MethodParameter returnType, ModelAndViewContainer mavContainer, NativeWebRequest webRequest) throws Exception {
+    public void handleReturnValue(Object returnValue, MethodParameter returnType, ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest) throws Exception {
+        // TODO 可通过客户端的传递的请求头来切换不同的响应体的内容
         mavContainer.setRequestHandled(true);
         // returnValue =  POJO
         ApiResponse apiResponse = ApiResponse.ok(returnValue);
+        HttpServletResponse response = (HttpServletResponse) webRequest.getNativeResponse();
+        response.addHeader("v", "3");
         ServletServerHttpResponse httpOutMessage = createOutputMessage(webRequest);
         converter.write(apiResponse, MediaType.APPLICATION_JSON, httpOutMessage);
     }

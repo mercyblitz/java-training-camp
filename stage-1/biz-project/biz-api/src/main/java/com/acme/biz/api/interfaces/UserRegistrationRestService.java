@@ -24,7 +24,6 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * 用户注册服务 REST 接口（Open Feign、 Spring WebMVC）
@@ -33,15 +32,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @since
  */
 @FeignClient("${user-registration.rest-service.name}")
-@RequestMapping("/api/user")
 @DubboService
+@Deprecated
 public interface UserRegistrationRestService {
 
-    @PostMapping("/register/v1")
+    @PostMapping(path = "/user/register", produces = "application/json;v=1") // V1
+    ApiResponse<Boolean> registerUser(@RequestBody @Validated ApiRequest<User> userRequest);
+
+    @PostMapping(path = "/user/register", produces = "application/json;v=2") // V2
     ApiResponse<Boolean> registerUser(@RequestBody @Validated User user);
 
-    @PostMapping("/register/v2")
-    @Deprecated
-    ApiResponse<Boolean> registerUser(@RequestBody @Validated ApiRequest<User> userRequest);
 
 }
