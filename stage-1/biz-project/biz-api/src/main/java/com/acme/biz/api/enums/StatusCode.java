@@ -27,7 +27,13 @@ import org.springframework.http.HttpStatus;
  */
 public enum StatusCode {
 
-    OK(0, "OK"),
+    OK(0, "OK") {
+        @Override
+        public String getMessage() {
+            return super.message;
+        }
+    },
+
 
     FAILED(-1, "Failed"),
 
@@ -55,5 +61,24 @@ public enum StatusCode {
         // 如果 message 是占位符，翻译成当前 message text
         // 否则，直接返回 message
         return message;
+    }
+}
+
+class MyEnum {
+
+    public static final MyEnum ONE = new MyEnum() { // # 匿名类
+
+        @Override
+        public String getValue() {
+            return "ONE";
+        }
+    };
+
+    private MyEnum() {
+
+    }
+
+    public String getValue() {
+        return "";
     }
 }
