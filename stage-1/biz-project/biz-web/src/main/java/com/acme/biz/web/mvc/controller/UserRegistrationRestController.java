@@ -20,6 +20,7 @@ import com.acme.biz.api.ApiRequest;
 import com.acme.biz.api.ApiResponse;
 import com.acme.biz.api.interfaces.UserRegistrationRestService;
 import com.acme.biz.api.model.User;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +36,7 @@ import org.springframework.web.servlet.View;
 public class UserRegistrationRestController implements UserRegistrationRestService {
 
     @Override
+    @Bulkhead(name="")
     public ApiResponse<Boolean> registerUser(@RequestBody @Validated User user) {
         return ApiResponse.ok(Boolean.TRUE);
     }

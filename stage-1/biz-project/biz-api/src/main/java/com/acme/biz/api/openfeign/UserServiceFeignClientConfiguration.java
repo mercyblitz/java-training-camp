@@ -16,6 +16,7 @@
  */
 package com.acme.biz.api.openfeign;
 
+import com.acme.biz.api.fault.tolerance.openfeign.BulkHeadRequestInterceptor;
 import feign.codec.Decoder;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -42,11 +43,16 @@ public class UserServiceFeignClientConfiguration {
      * {@link HttpMessageConvertersAutoConfiguration#messageConverters(ObjectProvider)}
      */
     @Autowired
-    private ObjectFactory<HttpMessageConverters> messageConverters;  
+    private ObjectFactory<HttpMessageConverters> messageConverters;
 
     @Bean
     public Decoder feignDecoder(ObjectProvider<HttpMessageConverterCustomizer> customizers) {
         return new ApiResponseDecoder(new ResponseEntityDecoder(new SpringDecoder(messageConverters, customizers)));
+    }
+
+    @Bean
+    public BulkHeadRequestInterceptor bulkHeadRequestInterceptor() {
+        return new BulkHeadRequestInterceptor();
     }
 
 }
