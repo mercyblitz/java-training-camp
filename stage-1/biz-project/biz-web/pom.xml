@@ -13,6 +13,7 @@
     <artifactId>biz-web</artifactId>
 
     <dependencies>
+
         <dependency>
             <groupId>com.acme</groupId>
             <artifactId>biz-core</artifactId>
@@ -37,6 +38,11 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-context</artifactId>
         </dependency>
 
         <dependency>
