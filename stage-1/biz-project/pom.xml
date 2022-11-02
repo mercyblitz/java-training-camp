@@ -38,6 +38,7 @@
         <module>biz-core</module>
         <module>biz-dependencies</module>
         <module>biz-client</module>
+        <module>eureka-server</module>
     </modules>
 
     <dependencyManagement>
