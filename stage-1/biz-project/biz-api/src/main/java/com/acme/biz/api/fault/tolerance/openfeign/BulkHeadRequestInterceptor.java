@@ -32,8 +32,13 @@ public class BulkHeadRequestInterceptor implements RequestInterceptor {
 
     @Override
     public void apply(RequestTemplate template) {
-        Request request = template.request();
-        RequestTemplate requestTemplate = request.requestTemplate();
-        String resourceName = request.httpMethod() + ":" + requestTemplate.path();
+        try {
+            Request request = template.request();
+            RequestTemplate requestTemplate = request.requestTemplate();
+            String resourceName = request.httpMethod() + ":" + requestTemplate.path();
+        } catch (Throwable e) {
+            // TODO
+            e.printStackTrace();
+        }
     }
 }

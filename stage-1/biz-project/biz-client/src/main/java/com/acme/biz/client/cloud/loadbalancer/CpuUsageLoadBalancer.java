@@ -43,7 +43,6 @@ public class CpuUsageLoadBalancer implements ReactorServiceInstanceLoadBalancer 
         this.serviceInstanceListSupplierProvider = serviceInstanceListSupplierProvider;
     }
 
-    @Override
     public Mono<Response<ServiceInstance>> choose(Request request) {
         ServiceInstanceListSupplier serviceInstanceListSupplier = serviceInstanceListSupplierProvider.getIfAvailable();
         Flux<List<ServiceInstance>> flux = serviceInstanceListSupplier.get();
@@ -56,4 +55,18 @@ public class CpuUsageLoadBalancer implements ReactorServiceInstanceLoadBalancer 
         }
         return Mono.justOrEmpty(new DefaultResponse(serviceInstances.get(0)));
     }
+
+//    /**
+//     * 兼容老版本
+//     *
+//     * @param request
+//     * @return
+//     */
+//    public Mono<org.springframework.cloud.client.loadbalancer.reactive.Response<ServiceInstance>> choose(
+//            org.springframework.cloud.client.loadbalancer.reactive.Request request) {
+//        ServiceInstanceListSupplier serviceInstanceListSupplier = serviceInstanceListSupplierProvider.getIfAvailable();
+//        Flux<List<ServiceInstance>> flux = serviceInstanceListSupplier.get();
+//        List<ServiceInstance> serviceInstances = flux.blockFirst();
+//        return Mono.justOrEmpty(new org.springframework.cloud.client.loadbalancer.reactive.DefaultResponse(serviceInstances.get(0)));
+//    }
 }

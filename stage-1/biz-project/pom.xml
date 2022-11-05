@@ -38,6 +38,7 @@
         <module>biz-core</module>
         <module>biz-dependencies</module>
         <module>biz-client</module>
+        <module>biz-client-ribbon</module>
         <module>eureka-server</module>
     </modules>
 
@@ -124,6 +125,33 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <id>Spring-Cloud-Greenwich.SR6</id>
+            <properties>
+                <spring-boot.version>2.1.13.RELEASE</spring-boot.version>
+                <spring-cloud.version>Greenwich.SR6</spring-cloud.version>
+            </properties>
+        </profile>
+
+        <profile>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <id>Spring-Cloud-Hoxton.SR12</id>
+            <properties>
+                <spring-boot.version>2.3.12.RELEASE</spring-boot.version>
+                <spring-cloud.version>Hoxton.SR12</spring-cloud.version>
+            </properties>
+        </profile>
+
+
+
+    </profiles>
 
 
 </project>

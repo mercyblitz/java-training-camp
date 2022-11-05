@@ -23,7 +23,6 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.boot.autoconfigure.http.HttpMessageConvertersAutoConfiguration;
-import org.springframework.cloud.openfeign.support.HttpMessageConverterCustomizer;
 import org.springframework.cloud.openfeign.support.ResponseEntityDecoder;
 import org.springframework.cloud.openfeign.support.SpringDecoder;
 import org.springframework.context.annotation.Bean;
@@ -46,8 +45,8 @@ public class UserServiceFeignClientConfiguration {
     private ObjectFactory<HttpMessageConverters> messageConverters;
 
     @Bean
-    public Decoder feignDecoder(ObjectProvider<HttpMessageConverterCustomizer> customizers) {
-        return new ApiResponseDecoder(new ResponseEntityDecoder(new SpringDecoder(messageConverters, customizers)));
+    public Decoder feignDecoder() {
+        return new ApiResponseDecoder(new ResponseEntityDecoder(new SpringDecoder(messageConverters)));
     }
 
     @Bean
