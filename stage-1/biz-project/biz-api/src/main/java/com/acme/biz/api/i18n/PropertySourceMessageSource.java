@@ -38,9 +38,12 @@ import java.util.Properties;
 /**
  * 基于 PropertySources 实现 {@link MessageSource}
  * <p>
- * 通过 ResourcePatternResolver 获取 Locale 与 Resource 映射关系
- * 解析 YAML Resource 变成 Spring PropertySource
- * 通过 Locale 获取 PropertySource
+ * <ol>
+ *     <li>通过 ResourcePatternResolver 获取 Locale 与 Resource 映射关系</li>
+ *     <li>解析 YAML Resource 变成 Spring PropertySource</li>
+ *     <li>通过 Slf4j {@link MessageFormatter} 实现格式化</li>
+ *     <li>通过 Locale 获取 PropertySource</li>
+ * </ol>
  *
  * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
  * @since 1.0.0
@@ -48,15 +51,11 @@ import java.util.Properties;
 public class PropertySourceMessageSource implements MessageSource, InitializingBean {
 
     /**
-     *
+     * 国际化文案 YAML Resource 路径 Pattern
+     * 通过这个 Pattern 可以感知 Locale 与 YAML Resource 的映射关系
+     * @see #afterPropertiesSet()
      */
     private static final String MESSAGES_RESOURCE_PATTERN = "classpath*:/META-INF/Messages*.yaml";
-
-    /**
-     * {} : 如果 Locale 等默认 Locale 的话，{} 为 ""，
-     * 否则 {} 为 Locale#toString()
-     */
-    private static final String RESOURCE_NAME_PATTERN = "classpath:/META-INF/Messages{}.yaml";
 
     private static final String PROPERTY_SOURCE_NAME_PREFIX = "Messages_";
 
@@ -116,16 +115,6 @@ public class PropertySourceMessageSource implements MessageSource, InitializingB
             return messagePattern;
         }
         return MessageFormatter.arrayFormat(messagePattern, args).getMessage();
-    }
-
-    protected static String getResourceName(Locale locale) {
-        String suffix = Locale.getDefault().equals(locale) ? "" : "_" + locale.toString();
-        return format(RESOURCE_NAME_PATTERN, suffix);
-    }
-
-    public static void main(String[] args) throws IOException {
-        System.out.println(getResourceName(Locale.getDefault()));
-        System.out.println(getResourceName(Locale.ENGLISH));
     }
 
     @Override
