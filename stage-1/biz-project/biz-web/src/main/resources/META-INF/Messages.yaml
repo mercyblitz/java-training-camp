@@ -3,5 +3,5 @@ messages:
     validation:
       constraints:
         NotNull:
-          message: 不允许为 NULL
+          message: 不允许为 NULL!!!
 

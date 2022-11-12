@@ -22,15 +22,11 @@ import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.NoSuchMessageException;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.MutablePropertySources;
-import org.springframework.core.env.PropertiesPropertySource;
-import org.springframework.core.env.PropertySource;
+import org.springframework.core.env.*;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.Locale;
 import java.util.Properties;
@@ -53,6 +49,7 @@ public class PropertySourceMessageSource implements MessageSource, InitializingB
     /**
      * 国际化文案 YAML Resource 路径 Pattern
      * 通过这个 Pattern 可以感知 Locale 与 YAML Resource 的映射关系
+     *
      * @see #afterPropertiesSet()
      */
     private static final String MESSAGES_RESOURCE_PATTERN = "classpath*:/META-INF/Messages*.yaml";
@@ -144,6 +141,26 @@ public class PropertySourceMessageSource implements MessageSource, InitializingB
     }
 
     private PropertySource buildPropertySource(Locale locale, Resource resource) {
+        String propertySourceName = buildPropertySourceName(locale);
+
+        PropertySource existedPropertySource = propertySources.get(propertySourceName);
+
+        if (existedPropertySource == null) { // 如果之前不存在的话，创建全新的 PropertySource
+            return newPropertySource(propertySourceName, locale, resource);
+        } else {
+            CompositePropertySource propertySource = new CompositePropertySource(propertySourceName);
+            // 添加已存在 PropertySource
+            propertySource.addFirstPropertySource(existedPropertySource);
+            // 添加新的 PropertySource
+            PropertySource newPropertySource = newPropertySource(propertySourceName + resource.getFilename(), locale, resource);
+            propertySource.addPropertySource(newPropertySource);
+
+            return propertySource;
+        }
+    }
+
+    private PropertySource newPropertySource(String propertySourceName, Locale locale, Resource resource) {
+
         YamlPropertiesFactoryBean yamlPropertiesFactoryBean = new YamlPropertiesFactoryBean();
         // 关联 YAML Resource
         yamlPropertiesFactoryBean.setResources(resource);
@@ -151,7 +168,7 @@ public class PropertySourceMessageSource implements MessageSource, InitializingB
         yamlPropertiesFactoryBean.afterPropertiesSet();
         // 将 YAML 资源转化成 Properties
         Properties properties = yamlPropertiesFactoryBean.getObject();
-        String propertySourceName = buildPropertySourceName(locale);
         return new PropertiesPropertySource(propertySourceName, properties);
     }
+
 }
