@@ -16,13 +16,19 @@
  */
 package com.acme.biz.web;
 
+import com.acme.biz.api.i18n.PropertySourceMessageSource;
+import com.acme.biz.web.i18n.LocalValidatorFactoryBeanPostProcessor;
 import com.acme.biz.web.servlet.mvc.interceptor.ResourceBulkheadHandlerInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -30,9 +36,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
+import static org.springframework.context.support.AbstractApplicationContext.MESSAGE_SOURCE_BEAN_NAME;
+
 @SpringBootApplication
 @ServletComponentScan
-@Import(ResourceBulkheadHandlerInterceptor.class)
+@Import(value = {ResourceBulkheadHandlerInterceptor.class, LocalValidatorFactoryBeanPostProcessor.class})
 @EnableDiscoveryClient // 激活服务发现客户端
 @EnableScheduling
 public class BizWebApplication implements WebMvcConfigurer {
@@ -49,7 +57,11 @@ public class BizWebApplication implements WebMvcConfigurer {
         SpringApplication.run(BizWebApplication.class, args);
     }
 
-
+    @Primary
+    @Bean(MESSAGE_SOURCE_BEAN_NAME)
+    public static MessageSource messageSource(ConfigurableEnvironment environment) {
+        return new PropertySourceMessageSource(environment);
+    }
 }
 
 //@RequestMapping("/base")

@@ -1,8 +1,7 @@
 messages:
-  my:
-    name: 小马哥
   javax:
     validation:
       constraints:
         NotNull:
           message: 不允许为 NULL
+
