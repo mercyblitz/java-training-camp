@@ -48,7 +48,7 @@ public class FeignClientSpringBootBoostrap {
         User user = new User();
         user.setId(1L);
         user.setName("ABC");
-        System.out.println(userRegistrationService.registerUser(user));
+        System.out.println("userRegistrationService.registerUser : "+userRegistrationService.registerUser(user));
 
         context.close();
     }
