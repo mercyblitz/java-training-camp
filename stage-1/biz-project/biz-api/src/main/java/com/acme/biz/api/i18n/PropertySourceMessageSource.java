@@ -27,6 +27,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Locale;
 import java.util.Properties;
@@ -140,7 +141,7 @@ public class PropertySourceMessageSource implements MessageSource, InitializingB
         }
     }
 
-    private PropertySource buildPropertySource(Locale locale, Resource resource) {
+    private PropertySource buildPropertySource(Locale locale, Resource resource) throws IOException {
         String propertySourceName = buildPropertySourceName(locale);
 
         PropertySource existedPropertySource = propertySources.get(propertySourceName);
@@ -152,7 +153,7 @@ public class PropertySourceMessageSource implements MessageSource, InitializingB
             // 添加已存在 PropertySource
             propertySource.addFirstPropertySource(existedPropertySource);
             // 添加新的 PropertySource
-            PropertySource newPropertySource = newPropertySource(propertySourceName + resource.getFilename(), locale, resource);
+            PropertySource newPropertySource = newPropertySource(propertySourceName + "@" + resource.getURI(), locale, resource);
             propertySource.addPropertySource(newPropertySource);
 
             return propertySource;
