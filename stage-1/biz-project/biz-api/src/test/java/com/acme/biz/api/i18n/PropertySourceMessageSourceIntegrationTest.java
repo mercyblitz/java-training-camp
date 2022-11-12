@@ -16,7 +16,6 @@
  */
 package com.acme.biz.api.i18n;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.mock.env.MockEnvironment;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -59,6 +57,7 @@ public class PropertySourceMessageSourceIntegrationTest {
         assertEquals("小马哥", messageSource.getMessage(code, args, Locale.getDefault()));
         assertEquals("mercyblitz", messageSource.getMessage(code, args, Locale.ENGLISH));
         assertEquals("mercy blitz", messageSource.getMessage(code, args, Locale.US));
+        assertEquals("default message", messageSource.getMessage("not.exist.code", args, "default message", Locale.US));
     }
 
 }

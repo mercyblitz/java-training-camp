@@ -49,6 +49,7 @@ public class PropertySourceMessageSourceTest {
         assertEquals("小马哥", propertySourceMessageSource.getMessage(code,args, Locale.getDefault()));
         assertEquals("mercyblitz", propertySourceMessageSource.getMessage(code,args, Locale.ENGLISH));
         assertEquals("mercy blitz", propertySourceMessageSource.getMessage(code,args, Locale.US));
+        assertEquals("default message", propertySourceMessageSource.getMessage("not.exist.code", args, "default message", Locale.US));
     }
 
 }
