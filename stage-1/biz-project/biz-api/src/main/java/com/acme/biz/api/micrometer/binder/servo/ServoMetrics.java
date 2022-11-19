@@ -195,6 +195,9 @@ public class ServoMetrics implements MeterBinder, ApplicationListener<Applicatio
                                 .tags("name", name, "className", className)
                                 .register(registry);
                         break;
+                    case "NORMALIZED":
+
+                        break;
                     default:
                         // TODO
                         break;
