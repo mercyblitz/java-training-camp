@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.acme.biz.api.micrometer.feign;
+package com.acme.biz.api.micrometer.binder.feign;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;

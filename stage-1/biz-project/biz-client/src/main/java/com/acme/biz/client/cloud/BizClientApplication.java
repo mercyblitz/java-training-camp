@@ -19,7 +19,7 @@ package com.acme.biz.client.cloud;
 import com.acme.biz.api.feign.config.DefaultFeignClientsConfiguration;
 import com.acme.biz.api.interfaces.UserRegistrationService;
 import com.acme.biz.api.micrometer.MicrometerConfiguration;
-import com.acme.biz.api.micrometer.feign.FeignCallCounterMetrics;
+import com.acme.biz.api.micrometer.binder.feign.FeignCallCounterMetrics;
 import com.acme.biz.api.model.User;
 import com.acme.biz.client.cloud.loadbalancer.CpuUsageBalancerConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;

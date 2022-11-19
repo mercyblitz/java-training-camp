@@ -68,7 +68,9 @@ public class ResourceBulkheadHandlerInterceptor implements HandlerInterceptor, I
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             Bulkhead bulkhead = doGetBulkhead(handlerMethod);
-            bulkhead.acquirePermission();
+            if (bulkhead != null) {
+                bulkhead.acquirePermission();
+            }
         }
 
         return true;
@@ -87,7 +89,9 @@ public class ResourceBulkheadHandlerInterceptor implements HandlerInterceptor, I
         if (handler instanceof HandlerMethod) {
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             Bulkhead bulkhead = doGetBulkhead(handlerMethod);
-            bulkhead.releasePermission();
+            if (bulkhead != null) {
+                bulkhead.releasePermission();
+            }
         }
     }
 

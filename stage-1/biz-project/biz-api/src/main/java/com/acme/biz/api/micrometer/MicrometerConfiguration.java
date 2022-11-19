@@ -33,6 +33,7 @@ import static java.util.Arrays.asList;
  */
 public class MicrometerConfiguration implements MeterRegistryCustomizer {
 
+
     @Value("${spring.application.name:default}")
     private String applicationName;
 

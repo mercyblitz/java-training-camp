@@ -16,7 +16,7 @@
  */
 package com.acme.biz.api.feign.config;
 
-import com.acme.biz.api.micrometer.feign.FeignCallCounterMetrics;
+import com.acme.biz.api.micrometer.binder.feign.FeignCallCounterMetrics;
 import org.springframework.cloud.openfeign.FeignClientsConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
