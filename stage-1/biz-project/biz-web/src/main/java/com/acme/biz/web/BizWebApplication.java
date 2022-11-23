@@ -17,6 +17,7 @@
 package com.acme.biz.web;
 
 import com.acme.biz.api.i18n.PropertySourceMessageSource;
+import com.acme.biz.api.micrometer.MicrometerConfiguration;
 import com.acme.biz.api.micrometer.binder.servo.ServoMetrics;
 import com.acme.biz.web.i18n.LocalValidatorFactoryBeanPostProcessor;
 import com.acme.biz.web.servlet.mvc.interceptor.ResourceBulkheadHandlerInterceptor;
@@ -42,6 +43,7 @@ import static org.springframework.context.support.AbstractApplicationContext.MES
 @SpringBootApplication
 @ServletComponentScan
 @Import(value = {
+        MicrometerConfiguration.class,
         ResourceBulkheadHandlerInterceptor.class,
         LocalValidatorFactoryBeanPostProcessor.class,
         ServoMetrics.class

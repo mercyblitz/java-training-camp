@@ -30,6 +30,11 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
         <!-- JMX HTTP bridge -->
         <dependency>
             <groupId>org.jolokia</groupId>
