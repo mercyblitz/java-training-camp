@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.acme.biz.web.metrics.ha.FileBaseInfluxMetricsExportAutoConfiguration

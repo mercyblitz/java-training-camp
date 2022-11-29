@@ -71,19 +71,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!-- Micrometer 使用 InfluxDB 协议作为注册中心 -->
-        <!--<dependency>-->
-        <!--    <groupId>io.micrometer</groupId>-->
-        <!--    <artifactId>micrometer-registry-influx</artifactId>-->
-        <!--</dependency>-->
-
-        <dependency>
-            <groupId>com.acme</groupId>
-            <artifactId>micrometer-registry-influx-ha</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
     </dependencies>
 
     <build>
