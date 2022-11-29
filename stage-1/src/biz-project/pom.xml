@@ -40,6 +40,8 @@
         <module>biz-client</module>
         <module>biz-client-ribbon</module>
         <module>eureka-server</module>
+        <module>micrometer-registry-influx-ha</module>
+        <module>micrometer-registry-influx-agent</module>
     </modules>
 
     <dependencyManagement>
