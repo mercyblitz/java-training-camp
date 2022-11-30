@@ -20,7 +20,7 @@ import com.acme.biz.api.feign.config.DefaultFeignClientsConfiguration;
 import com.acme.biz.api.interfaces.UserRegistrationService;
 import com.acme.biz.api.micrometer.MicrometerConfiguration;
 import com.acme.biz.api.micrometer.binder.feign.FeignCallCounterMetrics;
-import com.acme.biz.api.model.User;
+import com.acme.biz.client.cloud.controller.BizClientFeignController;
 import com.acme.biz.client.cloud.loadbalancer.CpuUsageBalancerConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -28,6 +28,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.loadbalancer.annotation.LoadBalancerClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -38,6 +39,7 @@ import org.springframework.scheduling.annotation.Scheduled;
  * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
  * @since 1.0.0
  */
+@ComponentScan
 @EnableAutoConfiguration
 @EnableDiscoveryClient
 @EnableFeignClients(clients = UserRegistrationService.class, defaultConfiguration = DefaultFeignClientsConfiguration.class)
@@ -51,13 +53,10 @@ public class BizClientApplication {
     }
 
     @Autowired
-    private UserRegistrationService userRegistrationService;
+    private BizClientFeignController bizClientFeignController;
 
     @Scheduled(fixedRate = 10 * 1000L)
     public void registerUser() {
-        User user = new User();
-        user.setId(1L);
-        user.setName("ABC");
-        System.out.println(userRegistrationService.registerUser(user));
+        bizClientFeignController.registerUser();
     }
 }
