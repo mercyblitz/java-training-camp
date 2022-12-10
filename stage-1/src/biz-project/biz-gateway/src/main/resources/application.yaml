@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: gateway
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+
+server:
+  port: 10000
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://127.0.0.1:12345/eureka
