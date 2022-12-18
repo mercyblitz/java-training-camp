@@ -19,13 +19,16 @@ package com.acme.biz.web;
 import com.acme.biz.api.i18n.PropertySourceMessageSource;
 import com.acme.biz.api.micrometer.MicrometerConfiguration;
 import com.acme.biz.api.micrometer.binder.servo.ServoMetrics;
+import com.acme.biz.web.config.XConfig;
 import com.acme.biz.web.i18n.LocalValidatorFactoryBeanPostProcessor;
 import com.acme.biz.web.servlet.mvc.interceptor.ResourceBulkheadHandlerInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -50,6 +53,7 @@ import static org.springframework.context.support.AbstractApplicationContext.MES
 })
 @EnableDiscoveryClient // 激活服务发现客户端
 @EnableScheduling
+@EnableConfigurationProperties
 public class BizWebApplication implements WebMvcConfigurer {
 
     @Autowired
@@ -68,6 +72,12 @@ public class BizWebApplication implements WebMvcConfigurer {
     @Bean(MESSAGE_SOURCE_BEAN_NAME)
     public static MessageSource messageSource(ConfigurableEnvironment environment) {
         return new PropertySourceMessageSource(environment);
+    }
+
+    @Bean
+    @RefreshScope
+    public XConfig xConfig() {
+        return new XConfig();
     }
 }
 
