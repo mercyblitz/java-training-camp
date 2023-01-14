@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.cloud.client.serviceregistry.Registration;
+import org.springframework.context.annotation.Profile;
 
 import static java.util.Arrays.asList;
 
@@ -40,11 +41,20 @@ public class MicrometerConfiguration implements MeterRegistryCustomizer {
     @Autowired
     private Registration registration;
 
+    /**
+     * 应用部署环境：TEST（测试）、STAGING（预发）、PROD（生产）
+     */
+    @Value("${env:TEST}")
+    private String env;
+
     @Override
     public void customize(MeterRegistry registry) {
         registry.config().commonTags(asList(
                 Tag.of("application", applicationName), // 应用维度的 Tag
-                Tag.of("host", registration.getHost())  // 应用 Host 的 Tag
+                Tag.of("host", registration.getHost()),  // 应用 Host 的 Tag
+                Tag.of("env", env)                      // 应用部署环境
         ));
     }
+
+
 }
