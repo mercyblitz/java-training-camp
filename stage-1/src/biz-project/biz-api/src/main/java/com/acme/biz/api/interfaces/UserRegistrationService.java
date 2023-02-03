@@ -45,4 +45,11 @@ public interface UserRegistrationService {
     @PostMapping(value = "/user/register", produces = "application/json;v=3") // V3
     Boolean registerUser(@RequestBody @Validated @Valid User user) throws UserException;
 
+    @PostMapping(value = "/user/register", produces = "application/json;v=3.1") // V3.1
+    default Boolean registerUserV31(@RequestBody @Validated @Valid User user) throws UserException {
+        // default 方法确保源码兼容（代码兼容）
+        // v3.1 的实现有个别 v3
+        return false;
+    }
+
 }
