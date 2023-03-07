@@ -1,0 +1,6 @@
+org.springframework.context.ApplicationListener=\
+com.acme.registry.eureka.env.ReplacingJavaSystemPropertiesApplicationListener,\
+com.acme.registry.eureka.env.SwitchingJavaSystemPropertiesApplicationListener
+
+org.springframework.boot.env.EnvironmentPostProcessor=\
+com.acme.registry.eureka.env.ReplacingJavaSystemPropertiesEnvironmentPostProcessor
