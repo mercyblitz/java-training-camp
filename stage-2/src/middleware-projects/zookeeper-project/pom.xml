@@ -13,11 +13,34 @@
     <artifactId>zookeeper-project</artifactId>
     <name>Zookeeper Project</name>
 
+    <properties>
+        <curator.version>5.4.0</curator.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.zookeeper</groupId>
             <artifactId>zookeeper</artifactId>
             <version>3.8.1</version>
+        </dependency>
+
+        <!-- Apache Curator -->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+            <version>${curator.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-x-discovery</artifactId>
+            <version>${curator.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-x-discovery-server</artifactId>
+            <version>${curator.version}</version>
         </dependency>
     </dependencies>
 
