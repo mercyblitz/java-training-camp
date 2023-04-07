@@ -180,20 +180,23 @@
 - 掌握 EJB / Spring 本地事务管理原理和实现，以及与 JDBC 规范的关系
 - 了解 MySQL 数据库事务实现原理
 <a name="VPUcW"></a>
-### [第十三节：本地数据库事务](https://mqu.h5.xeknow.com/sl/4BWr9h)
+### [第十三节：Java EE 本地事务管理原理和实现](https://mqu.h5.xeknow.com/sl/4BWr9h)
 <a name="KmRRV"></a>
 #### 主要内容
 
 - 事务特性：理解数据库事务 ACID 特性，原子性、一致性、隔离性以及持久性
 - 事务隔离级别：介绍 JDBC 兼容数据库事务隔离级别，并讨论 MySQL 事务隔离级别的特点以及实现原理
-- MySQL 事务实现原理：理解 Redo Log、Undo Log 以及 Bin Log 基本原理和存储机制等，并讨论 MySQL 事务的执行流程。
+- JDBC 规范：掌握 JDBC 核心 API，DataSource、Connection、Statement 等，理解 Metadata 在 Java 数据库实践方面的的价值，了解 JDBC 事务以及分布式事务的使用场景
+- EJB 规范：了解 EJB 整体架构，包括会话 Bean、消息驱动 Bean 以及持久化 Bean，掌握 EJB 事务传播机制
 <a name="jbNBs"></a>
-### [第十四节：Java EE 本地事务管理原理和实现](https://mqu.h5.xeknow.com/sl/45RyTG)
+### [第十四节：Spring 本地事务管理原理和实现](https://mqu.h5.xeknow.com/sl/45RyTG)
 <a name="rQpDS"></a>
 #### 主要内容
 
-- EJB 事务传播机制：了解 Java EE EJB 规范中的事务传播机制，并理解事务传播、与 JDBC Savepoing 以及线程模型之间的关系
-- Spring 本地事务实现原理：掌握 Spring 事务接口 PlatformTransactionManager、TransactionDefinition 以及 TransactionStatus 接口的区别和联系，理解 Spring TX 是如何实现事务传播的逻辑
+- Spring 事务技术基础：理解 Spring AOP 架构、实现模式以及核心 API
+- Spring 事务实现原理：掌握 Spring 事务定义 TransactionDefinition 初始化以及在事务上下文扮演的角色，分析事务接口 PlatformTransactionManager 抽闲、 包括理解 TransactionStatus 接口的区别和联系，同时 Spring TX 是如何实现事务传播的逻辑
+- Spring 事务与 JDBC：理解 Spring 事务与 JDBC Connection、Statement 以及 Savepoint 之间的关系
+- Spring 事务与 EJB：理解 Spring 是如何“借鉴”了Java EE EJB 规范中的事务传播机制，并理解事务传播
 
 <a name="JhpZF"></a>
 ## 第十周：分布式事务 Java EE 解决方案
