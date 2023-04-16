@@ -44,11 +44,15 @@ public class AtomikosSample {
 
         UserTransaction userTransaction = new UserTransactionImp();
 
+        // begin 方法未关联  XAResource.start 操作
         userTransaction.begin();
         // 插入 User 数据到 MySQL 本地数据库
+        // Atomikos 在 JDBC Connection 接口上实现动态代理，拦截 enlist 方法，包括:
+        // createStatement , prepareStatement 以及 prepareCall 方法
         insertUser(atomikosDataSourceBean1.getConnection());
         // 插入 User 数据到 MySQL 在 Docker 容器
-        insertUser(atomikosDataSourceBean2.getConnection());
+         insertUser(atomikosDataSourceBean2.getConnection());
+        // commit 方法分别执行 XAResource end , prepare 以及 commit 操作
         userTransaction.commit();
 
         // 关闭数据源
@@ -57,13 +61,11 @@ public class AtomikosSample {
     }
 
     private static void insertUser(Connection connection) throws SQLException {
-        String sql = "INSERT INTO user(id,name) VALUE (?,?);";
-        int userId = 2;
+        String sql = "INSERT INTO user(name) VALUE (?);";
         String userName = "admin";
         // 创建 PreparedStatement
         PreparedStatement preparedStatement1 = connection.prepareStatement(sql);
-        preparedStatement1.setInt(1, userId);
-        preparedStatement1.setString(2, userName);
+        preparedStatement1.setString(1, userName);
         preparedStatement1.executeUpdate();
     }
 
