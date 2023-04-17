@@ -33,6 +33,7 @@
 
     <modules>
         <module>zookeeper-project</module>
+        <module>distributed-transaction-project</module>
     </modules>
 
     <dependencyManagement>
