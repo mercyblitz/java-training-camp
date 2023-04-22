@@ -17,6 +17,7 @@
 package com.acme.middleware.distributed.transaction.sample.acid;
 
 import com.acme.middleware.distributed.transaction.TransactionConfiguration;
+import com.acme.middleware.distributed.transaction.service.TransactionMessageService;
 import com.acme.middleware.distributed.transaction.service.TransactionService;
 import com.acme.middleware.distributed.transaction.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @EnableAutoConfiguration
 @EnableTransactionManagement(proxyTargetClass = true)
-@Import({TransactionService.class, UserService.class, TransactionConfiguration.class})
+@Import({TransactionService.class, UserService.class, TransactionMessageService.class, TransactionConfiguration.class})
 public class LocalTransactionSample {
 
     @Autowired

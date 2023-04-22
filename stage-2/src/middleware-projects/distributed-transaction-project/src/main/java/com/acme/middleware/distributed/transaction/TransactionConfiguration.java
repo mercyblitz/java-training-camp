@@ -80,6 +80,9 @@ public class TransactionConfiguration implements BeanPostProcessor {
         }
 
         private void registerSynchronizations(TransactionStatus status) {
+            if (!TransactionSynchronizationManager.isSynchronizationActive()) {
+                TransactionSynchronizationManager.initSynchronization();
+            }
             if (status != null) {
                 applicationEventPublisher.publishEvent(status);
             }
