@@ -19,36 +19,46 @@ package com.acme.middleware.distributed.transaction.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
 /**
- * 交易服务
+ * 交易消息服务
  *
  * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
  * @since 1.0.0
  */
 @Service
-public class TransactionService {
+public class TransactionMessageService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Transactional
-    public Long addTransaction(Long sellerId, Long buyerId, Long amount) {
-        Long txId = jdbcTemplate.execute((ConnectionCallback<Long>) connection -> {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO transactions(seller_id,buyer_id,amount) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            ps.setLong(1, sellerId);
-            ps.setLong(2, buyerId);
+    public Long addTransactionMessage(Long txId, Long userId, Long amount) {
+        Long id = jdbcTemplate.execute((ConnectionCallback<Long>) connection -> {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO tx_messages(xid,user_id,amount) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            ps.setLong(1, txId);
+            ps.setLong(2, userId);
             ps.setLong(3, amount);
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
             return rs.next() ? rs.getLong(1) : null;
         });
-        return txId;
+        return id;
+    }
+
+    public boolean hasProcessedTransaction(Long txId, Long userId, Long amount) {
+        return jdbcTemplate.execute("SELECT count(id) FROM tx_messages WHERE xid = ? AND user_id = ? AND amount = ?",
+                (PreparedStatementCallback<Boolean>) ps -> {
+                    ps.setLong(1, txId);
+                    ps.setLong(2, userId);
+                    ps.setLong(3, amount);
+                    ResultSet rs = ps.executeQuery();
+                    return rs.next() ? rs.getInt(1) > 0 : false;
+                });
     }
 }

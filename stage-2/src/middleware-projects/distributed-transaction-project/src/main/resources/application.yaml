@@ -1,0 +1,5 @@
+spring:
+  autoconfigure:
+    exclude:
+      - com.atomikos.spring.AtomikosAutoConfiguration
+      - org.springframework.boot.autoconfigure.transaction.jta.JtaAutoConfiguration

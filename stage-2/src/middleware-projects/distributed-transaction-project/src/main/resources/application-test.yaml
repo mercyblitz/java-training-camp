@@ -3,8 +3,3 @@ spring:
     url: jdbc:mysql://127.0.0.1:13306/test_db
     user-name: root
     password: 123456
-
-
-
-  jta:
-    enabled: false

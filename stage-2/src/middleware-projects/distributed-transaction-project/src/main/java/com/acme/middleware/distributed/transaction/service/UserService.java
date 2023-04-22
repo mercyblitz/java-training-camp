@@ -16,6 +16,8 @@
  */
 package com.acme.middleware.distributed.transaction.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
@@ -31,11 +33,22 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private TransactionMessageService transactionMessageService;
+
     @Transactional
-    public boolean updateAmount(Long sellerId, Long buyerId, Long amount) {
+    public boolean updateAmount(Long txId, Long sellerId, Long buyerId, Long amount) {
+
+        if (transactionMessageService.hasProcessedTransaction(txId, sellerId, amount)) {
+            logger.warn("The transaction[id :{}] for seller[id : {}] has been processed", txId, sellerId);
+            return false;
+        }
+
         jdbcTemplate.execute("UPDATE users SET amt_sold=amt_sold + ? WHERE id=?",
                 (PreparedStatementCallback<Void>) ps -> {
                     ps.setLong(1, amount);
@@ -52,6 +65,8 @@ public class UserService {
                     return null;
                 });
 
+        transactionMessageService.addTransactionMessage(txId, sellerId, amount);
+        transactionMessageService.addTransactionMessage(txId, buyerId, amount);
 
         return true;
     }
