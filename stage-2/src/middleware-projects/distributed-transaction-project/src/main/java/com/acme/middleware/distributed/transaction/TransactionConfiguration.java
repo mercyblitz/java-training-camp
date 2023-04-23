@@ -26,6 +26,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.CallbackPreferringPlatformTransactionManager;
+import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
@@ -53,9 +55,11 @@ public class TransactionConfiguration implements BeanPostProcessor {
         return bean;
     }
 
-    private static class LifecyclePlatformTransactionManager implements PlatformTransactionManager {
+    private static class LifecyclePlatformTransactionManager implements CallbackPreferringPlatformTransactionManager {
 
         private final PlatformTransactionManager delegate;
+
+        private final CallbackPreferringPlatformTransactionManager callbackPreferringDelegate;
 
         private final ApplicationEventPublisher applicationEventPublisher;
 
@@ -65,6 +69,8 @@ public class TransactionConfiguration implements BeanPostProcessor {
                                             ApplicationEventPublisher applicationEventPublisher,
                                             ObjectProvider<TransactionSynchronization> transactionSynchronizations) {
             this.delegate = delegate;
+            this.callbackPreferringDelegate = delegate instanceof CallbackPreferringPlatformTransactionManager ?
+                    (CallbackPreferringPlatformTransactionManager) delegate : null;
             this.applicationEventPublisher = applicationEventPublisher;
             this.transactionSynchronizations = transactionSynchronizations;
         }
@@ -99,6 +105,11 @@ public class TransactionConfiguration implements BeanPostProcessor {
         @Override
         public void rollback(TransactionStatus status) throws TransactionException {
             delegate.rollback(status);
+        }
+
+        @Override
+        public <T> T execute(TransactionDefinition definition, TransactionCallback<T> callback) throws TransactionException {
+            return callbackPreferringDelegate.execute(definition, callback);
         }
     }
 
