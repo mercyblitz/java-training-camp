@@ -1,0 +1,23 @@
+server:
+  port: 7070
+
+spring:
+#  datasource:
+#    url: jdbc:mysql://127.0.0.1:13306/user_db
+#    user-name: root
+#    password: 123456
+
+  kafka:
+    bootstrapServers:
+      - 127.0.0.1:9092
+    consumer:
+      auto-offset-reset: earliest
+      valueDeserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+
+      enable-auto-commit: false
+
+    listener:
+      missing-topics-fatal: false
+      ack-mode: MANUAL_IMMEDIATE
