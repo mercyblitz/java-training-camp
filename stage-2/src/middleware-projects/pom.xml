@@ -28,11 +28,13 @@
         <mybatis.version>3.5.9</mybatis.version>
         <mybatis-spring-boot.version>2.2.2</mybatis-spring-boot.version>
         <resilience4j.version>1.7.0</resilience4j.version>
+        <netty.version>4.1.65.Final</netty.version>
     </properties>
 
     <modules>
         <module>zookeeper-project</module>
         <module>distributed-transaction-project</module>
+        <module>rpc-project</module>
     </modules>
 
     <dependencyManagement>
@@ -84,6 +86,13 @@
                 <groupId>io.github.resilience4j</groupId>
                 <artifactId>resilience4j-spring-boot2</artifactId>
                 <version>${resilience4j.version}</version>
+            </dependency>
+
+            <!-- Netty -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${netty.version}</version>
             </dependency>
 
         </dependencies>
