@@ -57,25 +57,30 @@ public class ServiceInvocationHandler implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (isObjectDeclaredMethod(method)) {
+            // 本地处理
             return handleObjectMethod(proxy, method, args);
         }
 
+        // 非 Object 方法实行远程调用
         InvocationRequest request = createRequest(method, args);
 
         return execute(request, proxy);
     }
 
     private Object execute(InvocationRequest request, Object proxy) {
-
+        // 在 RPC 服务集群中选择其中一个实例（负载均衡）
         ServiceInstance serviceInstance = selectServiceProviderInstance();
-
+        // 与目标 RPC 服务器建联
         ChannelFuture channelFuture = rpcClient.connect(serviceInstance);
-
+        // 发送请求（消息），关联 requestId
         sendRequest(request, channelFuture);
-
+        // 创建请求对应的 Future 对象
         ExchangeFuture exchangeFuture = createExchangeFuture(request);
 
         try {
+            // 阻塞 RPC 服务器响应，直到对方将 Response（对应 requestId) 设置到 ExchangeFuture 所关联的 Promise
+            // 即 Promise#setSuccess 或 Promise#setFailure 被调用
+            // 参考：InvocationResponseHandler
             return exchangeFuture.get();
         } catch (Exception e) {
             removeExchangeFuture(request.getRequestId());

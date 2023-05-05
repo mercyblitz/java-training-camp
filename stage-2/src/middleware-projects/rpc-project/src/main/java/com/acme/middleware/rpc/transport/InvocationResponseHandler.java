@@ -33,6 +33,7 @@ public class InvocationResponseHandler extends SimpleChannelInboundHandler<Invoc
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, InvocationResponse response) throws Exception {
+        // 当 RPC Server 成功响应时，requestId 对象 Promise(Future) 设置响应结果，并标记处理成功
         String requestId = response.getRequestId();
         ExchangeFuture exchangeFuture = removeExchangeFuture(requestId);
         if (exchangeFuture != null) {
