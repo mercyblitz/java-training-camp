@@ -43,6 +43,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.alipay.sofa</groupId>
+            <artifactId>jraft-rheakv-core</artifactId>
+            <version>${jraft.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
             <version>${protobuf-java.version}</version>

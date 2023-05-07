@@ -16,6 +16,7 @@
  */
 package com.acme.middleware.rpc.service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -77,6 +78,9 @@ public class DefaultServiceInstance implements ServiceInstance {
 
     @Override
     public Map<String, String> getMetadata() {
+        if (metadata == null) {
+            metadata = new HashMap<>();
+        }
         return metadata;
     }
 
