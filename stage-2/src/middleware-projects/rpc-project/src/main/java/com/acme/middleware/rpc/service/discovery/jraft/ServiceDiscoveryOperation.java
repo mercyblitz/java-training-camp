@@ -55,6 +55,13 @@ public class ServiceDiscoveryOperation<V> implements Serializable {
         return data;
     }
 
+    @Override
+    public String toString() {
+        return "ServiceDiscoveryOperation{" +
+                "kind=" + kind +
+                ", data=" + data +
+                '}';
+    }
 
     public ByteBuffer serialize() {
         byte[] data = null;

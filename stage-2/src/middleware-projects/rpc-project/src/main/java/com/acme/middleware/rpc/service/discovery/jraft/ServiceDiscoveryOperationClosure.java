@@ -18,6 +18,10 @@ package com.acme.middleware.rpc.service.discovery.jraft;
 
 import com.alipay.sofa.jraft.Closure;
 import com.alipay.sofa.jraft.Status;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.function.BiConsumer;
 
 /**
  * 服务操作回调
@@ -27,21 +31,34 @@ import com.alipay.sofa.jraft.Status;
  */
 public class ServiceDiscoveryOperationClosure implements Closure {
 
+    private static final Logger logger = LoggerFactory.getLogger(ServiceDiscoveryOperationClosure.class);
+
     private final ServiceDiscoveryOperation serviceDiscoveryOperation;
 
-    private final Closure delegate;
+    private final BiConsumer<Status, Object> callback;
 
-    public ServiceDiscoveryOperationClosure(ServiceDiscoveryOperation serviceDiscoveryOperation, Closure delegate) {
+    private Object result;
+
+    public ServiceDiscoveryOperationClosure(ServiceDiscoveryOperation serviceDiscoveryOperation, BiConsumer<Status, Object> callback) {
         this.serviceDiscoveryOperation = serviceDiscoveryOperation;
-        this.delegate = delegate;
+        this.callback = callback;
     }
 
     public ServiceDiscoveryOperation getServiceDiscoveryOperation() {
         return serviceDiscoveryOperation;
     }
 
+    public Object getResult() {
+        return result;
+    }
+
+    public void setResult(Object result) {
+        this.result = result;
+    }
+
     @Override
     public void run(Status status) {
-        delegate.run(status);
+        logger.info("Run closure[status : {}] with operation : {}", status, serviceDiscoveryOperation);
+        callback.accept(status, getResult());
     }
 }

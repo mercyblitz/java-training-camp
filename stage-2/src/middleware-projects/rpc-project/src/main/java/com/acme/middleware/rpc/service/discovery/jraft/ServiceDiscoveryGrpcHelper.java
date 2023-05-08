@@ -16,7 +16,7 @@
  */
 package com.acme.middleware.rpc.service.discovery.jraft;
 
-import com.acme.middleware.rpc.service.proto.ServiceDiscoveryOuter;
+import com.acme.middleware.rpc.service.discovery.proto.ServiceDiscoveryOuter;
 import com.alipay.sofa.jraft.rpc.RpcServer;
 import com.alipay.sofa.jraft.util.RpcFactoryHelper;
 import org.slf4j.Logger;
@@ -33,8 +33,8 @@ public class ServiceDiscoveryGrpcHelper {
 
     public static void initGRpc() {
         if ("com.alipay.sofa.jraft.rpc.impl.GrpcRaftRpcFactory".equals(RpcFactoryHelper.rpcFactory().getClass().getName())) {
-            RpcFactoryHelper.rpcFactory().registerProtobufSerializer(ServiceDiscoveryOuter.RegistrationRequest.class.getName(),
-                    ServiceDiscoveryOuter.RegistrationRequest.getDefaultInstance());
+            RpcFactoryHelper.rpcFactory().registerProtobufSerializer(ServiceDiscoveryOuter.Registration.class.getName(),
+                    ServiceDiscoveryOuter.Registration.getDefaultInstance());
 
             RpcFactoryHelper.rpcFactory().registerProtobufSerializer(ServiceDiscoveryOuter.Response.class.getName(),
                     ServiceDiscoveryOuter.Response.getDefaultInstance());

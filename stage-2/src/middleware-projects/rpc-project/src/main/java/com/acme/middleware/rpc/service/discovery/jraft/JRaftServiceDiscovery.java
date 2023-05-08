@@ -18,12 +18,16 @@ package com.acme.middleware.rpc.service.discovery.jraft;
 
 import com.acme.middleware.rpc.service.ServiceInstance;
 import com.acme.middleware.rpc.service.discovery.ServiceDiscovery;
-import com.acme.middleware.rpc.service.proto.ServiceDiscoveryOuter;
+import com.acme.middleware.rpc.service.discovery.proto.ServiceDiscoveryOuter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static com.acme.middleware.rpc.service.discovery.jraft.RegistrationRpcProcessor.adaptServiceInstance;
 
 /**
  * SOFAJRATF {@link ServiceDiscovery} 实现
@@ -41,7 +45,6 @@ public class JRaftServiceDiscovery implements ServiceDiscovery {
 
     private static final Logger LOG = LoggerFactory.getLogger(JRaftServiceDiscovery.class);
 
-
     private ServiceDiscoveryClient client;
 
     @Override
@@ -58,34 +61,56 @@ public class JRaftServiceDiscovery implements ServiceDiscovery {
 
     @Override
     public void register(ServiceInstance serviceInstance) {
+        register(serviceInstance, true);
+    }
+
+    private ServiceDiscoveryOuter.Registration buildRegistration(ServiceInstance serviceInstance, boolean registered) {
+        return ServiceDiscoveryOuter.Registration.newBuilder()
+                .setId(serviceInstance.getId())
+                .setServiceName(serviceInstance.getServiceName())
+                .setHost(serviceInstance.getHost())
+                .setPort(serviceInstance.getPort())
+                .setReversed(!registered)
+                .putAllMetadata(serviceInstance.getMetadata())
+                .build();
+    }
+
+    private void register(ServiceInstance serviceInstance, boolean registered) {
         // 调用 RPC
-        ServiceDiscoveryOuter.RegistrationRequest request = buildRegistrationRequest(serviceInstance);
+        ServiceDiscoveryOuter.Registration registration = buildRegistration(serviceInstance, registered);
         try {
-            client.invoke(request);
+            client.invoke(registration);
         } catch (Throwable e) {
             LOG.error("Fail to register a service instance : " + serviceInstance, e);
         }
     }
 
-    private ServiceDiscoveryOuter.RegistrationRequest buildRegistrationRequest(ServiceInstance serviceInstance) {
-        return ServiceDiscoveryOuter.RegistrationRequest.newBuilder()
-                .setId(serviceInstance.getId())
-                .setServiceName(serviceInstance.getServiceName())
-                .setHost(serviceInstance.getHost())
-                .setPort(serviceInstance.getPort())
-                .putAllMetadata(serviceInstance.getMetadata())
-                .build();
-    }
-
-
     @Override
     public void deregister(ServiceInstance serviceInstance) {
-
+        register(serviceInstance, false);
     }
 
     @Override
     public List<ServiceInstance> getServiceInstances(String serviceName) {
-        return null;
+        List<ServiceInstance> serviceInstances = Collections.emptyList();
+        try {
+            ServiceDiscoveryOuter.GetServiceInstancesResponse response = client.invoke(buildGetServiceInstancesRequest(serviceName));
+            List<ServiceDiscoveryOuter.Registration> registrations = response.getValueList();
+            serviceInstances = new ArrayList<>(registrations.size());
+            for (ServiceDiscoveryOuter.Registration registration : registrations) {
+                serviceInstances.add(adaptServiceInstance(registration));
+            }
+        } catch (Throwable e) {
+            LOG.error("Fail to get service instances by name : " + serviceName, e);
+        }
+        return serviceInstances;
+    }
+
+
+    private ServiceDiscoveryOuter.GetServiceInstancesRequest buildGetServiceInstancesRequest(String serviceName) {
+        return ServiceDiscoveryOuter.GetServiceInstancesRequest.newBuilder()
+                .setServiceName(serviceName)
+                .build();
     }
 
     @Override

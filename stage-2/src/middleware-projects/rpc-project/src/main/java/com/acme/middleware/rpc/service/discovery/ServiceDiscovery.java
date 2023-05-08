@@ -18,6 +18,7 @@ package com.acme.middleware.rpc.service.discovery;
 
 import com.acme.middleware.rpc.service.ServiceInstance;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 

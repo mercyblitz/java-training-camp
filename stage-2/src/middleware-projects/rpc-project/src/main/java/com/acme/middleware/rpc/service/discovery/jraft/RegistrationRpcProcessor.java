@@ -18,41 +18,53 @@ package com.acme.middleware.rpc.service.discovery.jraft;
 
 import com.acme.middleware.rpc.service.DefaultServiceInstance;
 import com.acme.middleware.rpc.service.ServiceInstance;
-import com.acme.middleware.rpc.service.proto.ServiceDiscoveryOuter;
+import com.acme.middleware.rpc.service.discovery.proto.ServiceDiscoveryOuter;
 import com.alipay.sofa.jraft.Closure;
+import com.alipay.sofa.jraft.Node;
 import com.alipay.sofa.jraft.Status;
 import com.alipay.sofa.jraft.entity.Task;
 import com.alipay.sofa.jraft.error.RaftError;
 import com.alipay.sofa.jraft.rpc.RpcContext;
 import com.alipay.sofa.jraft.rpc.RpcProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static com.acme.middleware.rpc.service.discovery.jraft.ServiceDiscoveryOperation.Kind.DEREGISTRATION;
+import static com.acme.middleware.rpc.service.discovery.jraft.ServiceDiscoveryOperation.Kind.REGISTRATION;
 
 /**
- * {@link ServiceDiscoveryOuter.RegistrationRequest 服务实例注册请求}处理器
+ * {@link ServiceDiscoveryOuter.Registration 服务实例注册请求}处理器
  *
  * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
  * @since 1.0.0
  */
-public class RegistrationRequestRpcProcessor implements
-        RpcProcessor<ServiceDiscoveryOuter.RegistrationRequest> {
+public class RegistrationRpcProcessor implements RpcProcessor<ServiceDiscoveryOuter.Registration> {
+
+    private static final Logger logger = LoggerFactory.getLogger(RegistrationRpcProcessor.class);
 
     private final ServiceDiscoveryServer server;
 
-    public RegistrationRequestRpcProcessor(ServiceDiscoveryServer server) {
+    public RegistrationRpcProcessor(ServiceDiscoveryServer server) {
         this.server = server;
     }
 
     @Override
-    public void handleRequest(RpcContext rpcCtx, ServiceDiscoveryOuter.RegistrationRequest request) {
+    public void handleRequest(RpcContext rpcCtx, ServiceDiscoveryOuter.Registration registration) {
 
-        ServiceInstance serviceInstance = adaptServiceInstance(request);
+        ServiceInstance serviceInstance = adaptServiceInstance(registration);
 
-        ServiceDiscoveryOperation.Kind kind = ServiceDiscoveryOperation.Kind.REGISTRATION;
+        ServiceDiscoveryOperation.Kind kind = registration.getReversed() ? DEREGISTRATION : REGISTRATION;
 
-        ServiceDiscoveryOperation serviceDiscoveryOperation = new ServiceDiscoveryOperation(kind, serviceInstance);
+        ServiceDiscoveryOperation operation = new ServiceDiscoveryOperation(kind, serviceInstance);
 
-        ServiceDiscoveryOperationClosure closure = new ServiceDiscoveryOperationClosure(serviceDiscoveryOperation, status -> {
+        ServiceDiscoveryOperationClosure closure = new ServiceDiscoveryOperationClosure(operation, (status, result) -> {
+            if (!status.isOk()) {
+                logger.warn("Closure status is : {}", status);
+                return;
+            }
             // RPC 响应到客户端
             rpcCtx.sendResponse(response(status));
+            logger.info("Registration request has been handled , status : {}", status);
         });
 
         if (!isLeader()) {
@@ -60,41 +72,52 @@ public class RegistrationRequestRpcProcessor implements
             return;
         }
 
-
         Task task = new Task();
         // 将待注册的服务实例序列化成 byte 数组
         // 写入到本地日志，将作为 AppendEntries RPC 请求的来源 -> Followers
-        task.setData(serviceDiscoveryOperation.serialize());
+        task.setData(operation.serialize());
         // 设置 ServiceInstanceRegistrationClosure
         // 触发 Leader 节点上的状态机 -> ServiceRegistrationStateMachine.onApply
         task.setDone(closure);
         // 提交任务
-        this.server.getNode().apply(task);
+        getNode().apply(task);
+
+        logger.info("The task of '{}' has been applied , data : {}", operation.getKind(), operation.getData());
+
     }
 
     private boolean isLeader() {
-        return server.getFsm().isLeader();
+        return getFsm().isLeader();
     }
 
     private void handlerNotLeaderError(final Closure closure) {
+        logger.error("No Leader node : {}", getNode().getNodeId());
         closure.run(new Status(RaftError.EPERM, "Not leader"));
     }
 
+    private Node getNode() {
+        return this.server.getNode();
+    }
 
-    private ServiceInstance adaptServiceInstance(ServiceDiscoveryOuter.RegistrationRequest request) {
+    private ServiceDiscoveryStateMachine getFsm() {
+        return this.server.getFsm();
+    }
+
+
+    public static ServiceInstance adaptServiceInstance(ServiceDiscoveryOuter.Registration registration) {
         DefaultServiceInstance instance = new DefaultServiceInstance();
-        instance.setId(request.getId());
-        instance.setServiceName(request.getServiceName());
-        instance.setHost(request.getHost());
-        instance.setPort(request.getPort());
-        instance.setMetadata(request.getMetadataMap());
+        instance.setId(registration.getId());
+        instance.setServiceName(registration.getServiceName());
+        instance.setHost(registration.getHost());
+        instance.setPort(registration.getPort());
+        instance.setMetadata(registration.getMetadataMap());
         return instance;
     }
 
     private ServiceDiscoveryOuter.Response response(Status status) {
         ServiceDiscoveryOuter.Response response = ServiceDiscoveryOuter.Response.newBuilder()
                 .setCode(status.getCode())
-                .setMessage(status.getErrorMsg())
+                .setMessage(status.getErrorMsg() == null ? "" : status.getErrorMsg())
                 .build();
         return response;
 
@@ -102,6 +125,6 @@ public class RegistrationRequestRpcProcessor implements
 
     @Override
     public String interest() {
-        return ServiceDiscoveryOuter.RegistrationRequest.class.getName();
+        return ServiceDiscoveryOuter.Registration.class.getName();
     }
 }
