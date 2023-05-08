@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.acme.middleware.rpc.service.registry;
+package com.acme.middleware.rpc.service.discovery;
 
 import com.acme.middleware.rpc.serializer.Serializer;
 import com.acme.middleware.rpc.service.ServiceInstance;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
  * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
  * @since 1.0.0
  */
-public class FileSystemServiceRegistry implements ServiceRegistry {
+public class FileSystemServiceDiscovery implements ServiceDiscovery {
 
     private final Serializer serializer = Serializer.DEFAULT;
 

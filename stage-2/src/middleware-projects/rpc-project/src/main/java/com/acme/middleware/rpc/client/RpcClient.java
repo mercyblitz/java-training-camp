@@ -20,7 +20,7 @@ import com.acme.middleware.rpc.codec.MessageDecoder;
 import com.acme.middleware.rpc.codec.MessageEncoder;
 import com.acme.middleware.rpc.loadbalancer.ServiceInstanceSelector;
 import com.acme.middleware.rpc.service.ServiceInstance;
-import com.acme.middleware.rpc.service.registry.ServiceRegistry;
+import com.acme.middleware.rpc.service.discovery.ServiceDiscovery;
 import com.acme.middleware.rpc.transport.InvocationResponseHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -33,6 +33,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.lang.reflect.Proxy;
+import java.util.Map;
 
 /**
  * 客户端引导程序
@@ -42,7 +43,7 @@ import java.lang.reflect.Proxy;
  */
 public class RpcClient implements AutoCloseable {
 
-    private final ServiceRegistry serviceRegistry;
+    private final ServiceDiscovery serviceDiscovery;
 
     private final ServiceInstanceSelector selector;
 
@@ -50,8 +51,8 @@ public class RpcClient implements AutoCloseable {
 
     private final EventLoopGroup group;
 
-    public RpcClient(ServiceRegistry serviceRegistry, ServiceInstanceSelector selector) {
-        this.serviceRegistry = serviceRegistry;
+    public RpcClient(ServiceDiscovery serviceDiscovery, ServiceInstanceSelector selector) {
+        this.serviceDiscovery = serviceDiscovery;
         this.selector = selector;
         this.bootstrap = new Bootstrap();
         this.group = new NioEventLoopGroup();
@@ -68,10 +69,12 @@ public class RpcClient implements AutoCloseable {
                         ch.pipeline().addLast("response-handler", new InvocationResponseHandler());
                     }
                 });
+
+        serviceDiscovery.initialize((Map) System.getProperties());
     }
 
     public RpcClient() {
-        this(ServiceRegistry.DEFAULT, ServiceInstanceSelector.DEFAULT);
+        this(ServiceDiscovery.DEFAULT, ServiceInstanceSelector.DEFAULT);
     }
 
     public <T> T getService(String serviceName, Class<T> serviceInterfaceClass) {
@@ -87,8 +90,8 @@ public class RpcClient implements AutoCloseable {
         return channelFuture.awaitUninterruptibly();
     }
 
-    protected ServiceRegistry getServiceRegistry() {
-        return serviceRegistry;
+    protected ServiceDiscovery getServiceRegistry() {
+        return serviceDiscovery;
     }
 
     protected ServiceInstanceSelector getSelector() {

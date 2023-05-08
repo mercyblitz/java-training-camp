@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.acme.middleware.rpc.service.registry.zookeeper;
+package com.acme.middleware.rpc.service.discovery.zookeeper;
 
 import com.acme.middleware.rpc.service.ServiceInstance;
-import com.acme.middleware.rpc.service.registry.ServiceRegistry;
+import com.acme.middleware.rpc.service.discovery.ServiceDiscovery;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +28,7 @@ import java.util.Map;
  * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
  * @since 1.0.0
  */
-public class ZookeeperServiceRegistry implements ServiceRegistry {
+public class ZookeeperServiceDiscovery implements ServiceDiscovery {
 
     @Override
     public void initialize(Map<String, Object> config) {

@@ -15,9 +15,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.acme.middleware.rpc.service.registry.jraft;
+package com.acme.middleware.rpc.service.discovery.jraft;
 
-import com.acme.middleware.rpc.service.registry.ServiceRegistry;
 import com.alipay.sofa.jraft.Node;
 import com.alipay.sofa.jraft.RaftGroupService;
 import com.alipay.sofa.jraft.conf.Configuration;
@@ -30,31 +29,35 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 
+import static com.acme.middleware.rpc.service.discovery.jraft.JRaftServiceDiscovery.DEFAULT_GROUP_ID_PROPERTY_VALUE;
+import static com.acme.middleware.rpc.service.discovery.jraft.JRaftServiceDiscovery.GROUP_ID_PROPERTY_NAME;
 
-public class ServiceRegistrationServer {
+
+public class ServiceDiscoveryServer {
 
     private RaftGroupService raftGroupService;
-    private Node node;
-    private ServiceRegistrationStateMachine fsm;
 
-    public ServiceRegistrationServer(final String dataPath, final String groupId, final PeerId serverId,
-                                     final NodeOptions nodeOptions) throws IOException {
+    private Node node;
+
+    private ServiceDiscoveryStateMachine fsm;
+
+    public ServiceDiscoveryServer(final String dataPath, final String groupId, final PeerId serverId,
+                                  final NodeOptions nodeOptions) throws IOException {
         // init raft data path, it contains log,meta,snapshot
         FileUtils.forceMkdir(new File(dataPath));
 
         // here use same RPC server for raft and business. It also can be seperated generally
         final RpcServer rpcServer = RaftRpcServerFactory.createRaftRpcServer(serverId.getEndpoint());
         // GrpcServer need init marshaller
-        ServiceRegistrationGrpcHelper.initGRpc();
-        ServiceRegistrationGrpcHelper.setRpcServer(rpcServer);
+        ServiceDiscoveryGrpcHelper.initGRpc();
+        ServiceDiscoveryGrpcHelper.setRpcServer(rpcServer);
 
         // register business processor
-        ServiceRegistry serviceRegistry = new JRaftServiceRegistry(this);
-        rpcServer.registerProcessor(new ServiceInstanceRegistrationRequestProcessor(serviceRegistry));
+        rpcServer.registerProcessor(new RegistrationRequestRpcProcessor(this));
         // TODO
 
         // init state machine
-        this.fsm = new ServiceRegistrationStateMachine();
+        this.fsm = new ServiceDiscoveryStateMachine();
         // set fsm to nodeOptions
         nodeOptions.setFsm(this.fsm);
         // set storage path (log,meta,snapshot)
@@ -70,7 +73,7 @@ public class ServiceRegistrationServer {
         this.node = this.raftGroupService.start();
     }
 
-    public ServiceRegistrationStateMachine getFsm() {
+    public ServiceDiscoveryStateMachine getFsm() {
         return this.fsm;
     }
 
@@ -97,17 +100,17 @@ public class ServiceRegistrationServer {
     }
 
     public static void main(final String[] args) throws IOException {
-        if (args.length != 4) {
-            System.out
-                    .println("Usage : java com.alipay.sofa.jraft.example.counter.CounterServer {dataPath} {groupId} {serverId} {initConf}");
-            System.out
-                    .println("Example: java com.alipay.sofa.jraft.example.counter.CounterServer /tmp/server1 counter 127.0.0.1:8081 127.0.0.1:8081,127.0.0.1:8082,127.0.0.1:8083");
+        if (args.length != 2) {
+            String className = ServiceDiscoveryServer.class.getName();
+            System.err.printf("Usage : %s {serverId} {initConf}\n", className);
+            System.err.printf("Example: %s 127.0.0.1:8081 127.0.0.1:8081,127.0.0.1:8082,127.0.0.1:8083\n", className);
             System.exit(1);
         }
-        final String dataPath = args[0];
-        final String groupId = args[1];
-        final String serverIdStr = args[2];
-        final String initConfStr = args[3];
+        final String serverIdStr = args[0];
+        final String initConfStr = args[1];
+        final String dataPath = System.getProperty("user.dir") + File.separator + ".service-discovery" + File.separator + serverIdStr.replace(':', '_');
+        final String groupId = System.getProperty(GROUP_ID_PROPERTY_NAME, DEFAULT_GROUP_ID_PROPERTY_VALUE);
+
 
         final NodeOptions nodeOptions = new NodeOptions();
         // for test, modify some params
@@ -130,10 +133,10 @@ public class ServiceRegistrationServer {
         nodeOptions.setInitialConf(initConf);
 
         // start raft server
-        final ServiceRegistrationServer serviceRegistrationServer = new ServiceRegistrationServer(dataPath, groupId, serverId, nodeOptions);
+        final ServiceDiscoveryServer serviceDiscoveryServer = new ServiceDiscoveryServer(dataPath, groupId, serverId, nodeOptions);
         System.out.println("Started counter server at port:"
-                + serviceRegistrationServer.getNode().getNodeId().getPeerId().getPort());
+                + serviceDiscoveryServer.getNode().getNodeId().getPeerId().getPort());
         // GrpcServer need block to prevent process exit
-        ServiceRegistrationGrpcHelper.blockUntilShutdown();
+        ServiceDiscoveryGrpcHelper.blockUntilShutdown();
     }
 }

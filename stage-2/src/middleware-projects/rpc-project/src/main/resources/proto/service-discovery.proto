@@ -3,9 +3,9 @@ syntax = "proto3";
 package service;
 
 option java_package = "com.acme.middleware.rpc.service.proto";
-option java_outer_classname = "ServiceDiscoveryOutter";
+option java_outer_classname = "ServiceDiscoveryOuter";
 
-message ServiceInstanceRegistrationRequest {
+message RegistrationRequest {
   string id = 1;
   string serviceName = 2;
   string host = 3;
@@ -13,7 +13,7 @@ message ServiceInstanceRegistrationRequest {
   map<string, string> metadata = 5;
 }
 
-message ServiceInstanceRegistrationResponse {
+message Response {
   int32 code = 1;
   string message = 2;
 }

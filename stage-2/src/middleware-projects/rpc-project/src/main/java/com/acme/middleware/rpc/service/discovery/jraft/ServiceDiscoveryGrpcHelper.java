@@ -14,32 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.acme.middleware.rpc.service.registry.jraft;
+package com.acme.middleware.rpc.service.discovery.jraft;
 
-import com.acme.middleware.rpc.service.proto.ServiceDiscoveryOutter;
+import com.acme.middleware.rpc.service.proto.ServiceDiscoveryOuter;
 import com.alipay.sofa.jraft.rpc.RpcServer;
 import com.alipay.sofa.jraft.util.RpcFactoryHelper;
-import com.google.protobuf.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
-public class ServiceRegistrationGrpcHelper {
+public class ServiceDiscoveryGrpcHelper {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ServiceRegistrationGrpcHelper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceDiscoveryGrpcHelper.class);
 
-    public static RpcServer     rpcServer;
+    public static RpcServer rpcServer;
 
     public static void initGRpc() {
-        if ("com.alipay.sofa.jraft.rpc.impl.GrpcRaftRpcFactory".equals(RpcFactoryHelper.rpcFactory().getClass()
-            .getName())) {
-            RpcFactoryHelper.rpcFactory().registerProtobufSerializer(ServiceDiscoveryOutter.ServiceInstanceRegistrationRequest.class.getName(),
-                ServiceDiscoveryOutter.ServiceInstanceRegistrationRequest.getDefaultInstance());
+        if ("com.alipay.sofa.jraft.rpc.impl.GrpcRaftRpcFactory".equals(RpcFactoryHelper.rpcFactory().getClass().getName())) {
+            RpcFactoryHelper.rpcFactory().registerProtobufSerializer(ServiceDiscoveryOuter.RegistrationRequest.class.getName(),
+                    ServiceDiscoveryOuter.RegistrationRequest.getDefaultInstance());
 
-            RpcFactoryHelper.rpcFactory().registerProtobufSerializer(ServiceDiscoveryOutter.ServiceInstanceRegistrationResponse.class.getName(),
-                    ServiceDiscoveryOutter.ServiceInstanceRegistrationResponse.getDefaultInstance());
+            RpcFactoryHelper.rpcFactory().registerProtobufSerializer(ServiceDiscoveryOuter.Response.class.getName(),
+                    ServiceDiscoveryOuter.Response.getDefaultInstance());
 
 //            try {
 //                Class<?> clazz = Class.forName("com.alipay.sofa.jraft.rpc.impl.MarshallerHelper");
@@ -54,7 +52,7 @@ public class ServiceRegistrationGrpcHelper {
     }
 
     public static void setRpcServer(RpcServer rpcServer) {
-        ServiceRegistrationGrpcHelper.rpcServer = rpcServer;
+        ServiceDiscoveryGrpcHelper.rpcServer = rpcServer;
     }
 
     public static void blockUntilShutdown() {
@@ -62,14 +60,14 @@ public class ServiceRegistrationGrpcHelper {
             return;
         }
         if ("com.alipay.sofa.jraft.rpc.impl.GrpcRaftRpcFactory".equals(RpcFactoryHelper.rpcFactory().getClass()
-            .getName())) {
+                .getName())) {
             try {
                 Method getServer = rpcServer.getClass().getMethod("getServer");
                 Object grpcServer = getServer.invoke(rpcServer);
 
                 Method shutdown = grpcServer.getClass().getMethod("shutdown");
                 Method awaitTerminationLimit = grpcServer.getClass().getMethod("awaitTermination", long.class,
-                    TimeUnit.class);
+                        TimeUnit.class);
 
                 Runtime.getRuntime().addShutdownHook(new Thread() {
                     @Override

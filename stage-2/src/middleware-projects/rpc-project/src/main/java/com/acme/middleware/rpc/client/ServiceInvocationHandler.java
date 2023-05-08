@@ -19,7 +19,7 @@ package com.acme.middleware.rpc.client;
 import com.acme.middleware.rpc.InvocationRequest;
 import com.acme.middleware.rpc.loadbalancer.ServiceInstanceSelector;
 import com.acme.middleware.rpc.service.ServiceInstance;
-import com.acme.middleware.rpc.service.registry.ServiceRegistry;
+import com.acme.middleware.rpc.service.discovery.ServiceDiscovery;
 import io.netty.channel.ChannelFuture;
 
 import java.lang.reflect.InvocationHandler;
@@ -43,14 +43,14 @@ public class ServiceInvocationHandler implements InvocationHandler {
 
     private final RpcClient rpcClient;
 
-    private final ServiceRegistry serviceRegistry;
+    private final ServiceDiscovery serviceDiscovery;
 
     private final ServiceInstanceSelector selector;
 
     public ServiceInvocationHandler(String serviceName, RpcClient rpcClient) {
         this.serviceName = serviceName;
         this.rpcClient = rpcClient;
-        this.serviceRegistry = rpcClient.getServiceRegistry();
+        this.serviceDiscovery = rpcClient.getServiceRegistry();
         this.selector = rpcClient.getSelector();
     }
 
@@ -94,7 +94,7 @@ public class ServiceInvocationHandler implements InvocationHandler {
     }
 
     private ServiceInstance selectServiceProviderInstance() {
-        List<ServiceInstance> serviceInstances = serviceRegistry.getServiceInstances(serviceName);
+        List<ServiceInstance> serviceInstances = serviceDiscovery.getServiceInstances(serviceName);
         return selector.select(serviceInstances);
     }
 

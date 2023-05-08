@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.acme.middleware.rpc.service.registry.jraft;
+package com.acme.middleware.rpc.service.discovery.jraft;
 
 import com.alipay.sofa.jraft.Closure;
 import com.alipay.sofa.jraft.Status;
@@ -25,15 +25,23 @@ import com.alipay.sofa.jraft.Status;
  * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
  * @since 1.0.0
  */
-public abstract class ServiceOperationClosure implements Closure {
+public class ServiceDiscoveryOperationClosure implements Closure {
 
-    private final ServiceOperation serviceOperation;
+    private final ServiceDiscoveryOperation serviceDiscoveryOperation;
 
-    public ServiceOperationClosure(ServiceOperation serviceOperation) {
-        this.serviceOperation = serviceOperation;
+    private final Closure delegate;
+
+    public ServiceDiscoveryOperationClosure(ServiceDiscoveryOperation serviceDiscoveryOperation, Closure delegate) {
+        this.serviceDiscoveryOperation = serviceDiscoveryOperation;
+        this.delegate = delegate;
     }
 
-    public ServiceOperation getServiceOperation() {
-        return serviceOperation;
+    public ServiceDiscoveryOperation getServiceDiscoveryOperation() {
+        return serviceDiscoveryOperation;
+    }
+
+    @Override
+    public void run(Status status) {
+        delegate.run(status);
     }
 }

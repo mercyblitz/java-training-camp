@@ -16,12 +16,13 @@
  */
 package com.acme.middleware.rpc.server;
 
+import ch.qos.logback.core.util.ContextUtil;
 import com.acme.middleware.rpc.codec.MessageDecoder;
 import com.acme.middleware.rpc.codec.MessageEncoder;
 import com.acme.middleware.rpc.context.ServiceContext;
 import com.acme.middleware.rpc.service.DefaultServiceInstance;
 import com.acme.middleware.rpc.service.ServiceInstance;
-import com.acme.middleware.rpc.service.registry.ServiceRegistry;
+import com.acme.middleware.rpc.service.discovery.ServiceDiscovery;
 import com.acme.middleware.rpc.transport.InvocationRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -37,6 +38,7 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -53,9 +55,9 @@ public class RpcServer implements AutoCloseable {
 
     private final ServiceContext serviceContext;
 
-    private final ServiceRegistry serviceRegistry;
+    private final ServiceDiscovery serviceDiscovery;
 
-    private final ServiceInstance localServiceInstance;
+    private ServiceInstance localServiceInstance;
 
     private ServerBootstrap bootstrap;
 
@@ -69,14 +71,13 @@ public class RpcServer implements AutoCloseable {
         this.applicationName = applicationName;
         this.port = port;
         this.serviceContext = ServiceContext.DEFAULT;
-        this.serviceRegistry = ServiceRegistry.DEFAULT;
-        this.localServiceInstance = createLocalServiceInstance();
+        this.serviceDiscovery = ServiceDiscovery.DEFAULT;
     }
 
-    private ServiceInstance createLocalServiceInstance() {
+    private ServiceInstance createLocalServiceInstance() throws Exception {
         DefaultServiceInstance serviceInstance = new DefaultServiceInstance();
         serviceInstance.setId(UUID.randomUUID().toString());
-        serviceInstance.setHost("127.0.0.1");
+        serviceInstance.setHost(ContextUtil.getLocalHostName());
         serviceInstance.setPort(port);
         serviceInstance.setServiceName(applicationName);
         // TODO
@@ -89,7 +90,9 @@ public class RpcServer implements AutoCloseable {
         return this;
     }
 
-    public RpcServer start() {
+    public RpcServer start() throws Exception {
+        this.serviceDiscovery.initialize((Map) System.getProperties());
+        this.localServiceInstance = createLocalServiceInstance();
         this.bootstrap = new ServerBootstrap();
         this.group = new NioEventLoopGroup();
         this.workerGroup = new NioEventLoopGroup();
@@ -121,11 +124,11 @@ public class RpcServer implements AutoCloseable {
     }
 
     private void registerServer() {
-        serviceRegistry.register(localServiceInstance);
+        serviceDiscovery.register(localServiceInstance);
     }
 
     private void deregisterServer() {
-        serviceRegistry.deregister(localServiceInstance);
+        serviceDiscovery.deregister(localServiceInstance);
     }
 
     @Override

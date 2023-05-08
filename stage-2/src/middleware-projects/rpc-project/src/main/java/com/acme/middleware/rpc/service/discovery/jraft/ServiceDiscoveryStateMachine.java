@@ -14,15 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.acme.middleware.rpc.service.registry.jraft;
+package com.acme.middleware.rpc.service.discovery.jraft;
 
 import com.acme.middleware.rpc.service.ServiceInstance;
-import com.alipay.remoting.exception.CodecException;
-import com.alipay.remoting.serialization.SerializerManager;
 import com.alipay.sofa.jraft.Closure;
 import com.alipay.sofa.jraft.Iterator;
 import com.alipay.sofa.jraft.Status;
 import com.alipay.sofa.jraft.core.StateMachineAdapter;
+import com.alipay.sofa.jraft.entity.LeaderChangeContext;
+import com.alipay.sofa.jraft.entity.PeerId;
+import com.alipay.sofa.jraft.error.RaftError;
 import com.alipay.sofa.jraft.error.RaftException;
 import com.alipay.sofa.jraft.storage.snapshot.SnapshotReader;
 import com.alipay.sofa.jraft.storage.snapshot.SnapshotWriter;
@@ -40,10 +41,12 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * 服务发现状态机 FSM
+ */
+public class ServiceDiscoveryStateMachine extends StateMachineAdapter {
 
-public class ServiceRegistrationStateMachine extends StateMachineAdapter {
-
-    private static final Logger LOG = LoggerFactory.getLogger(ServiceRegistrationStateMachine.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceDiscoveryStateMachine.class);
     private static ThreadPoolExecutor executor = ThreadPoolUtil
             .newBuilder()
             .poolName("JRAFT_SERVICE_EXECUTOR")
@@ -53,7 +56,7 @@ public class ServiceRegistrationStateMachine extends StateMachineAdapter {
             .keepAliveSeconds(60L)
             .workQueue(new SynchronousQueue<>())
             .threadFactory(
-                    new NamedThreadFactory("JRaft-ServiceRegistration-Executor-", true)).build();
+                    new NamedThreadFactory("JRaft-ServiceDiscovery-Executor-", true)).build();
 
 
     /**
@@ -82,54 +85,35 @@ public class ServiceRegistrationStateMachine extends StateMachineAdapter {
         return this.leaderTerm.get() > 0;
     }
 
-//    /**
-//     * Returns current value.
-//     */
-//    public long getValue() {
-//        return this.value.get();
-//    }
-
     @Override
     public void onApply(final Iterator iter) {
         while (iter.hasNext()) {
-            ServiceOperation serviceOperation = null;
+            ServiceDiscoveryOperation serviceDiscoveryOperation = null;
 
-            ServiceOperationClosure closure = null;
+            ServiceDiscoveryOperationClosure closure = null;
             if (iter.done() != null) {
                 // 从当前 Leader 节点获取  Closure
-                closure = (ServiceOperationClosure) iter.done();
-                serviceOperation = closure.getServiceOperation();
+                closure = (ServiceDiscoveryOperationClosure) iter.done();
+                serviceDiscoveryOperation = closure.getServiceDiscoveryOperation();
             } else {
-                // 在 Follower 节点通过 日志反序列化得到 ServiceOperation
+                // 在 Follower 节点通过 日志反序列化得到 ServiceDiscoveryOperation
                 final ByteBuffer data = iter.getData();
-                try {
-                    serviceOperation = SerializerManager.getSerializer(SerializerManager.Hessian2).deserialize(
-                            data.array(), ServiceOperation.class.getName());
-                } catch (final CodecException e) {
-                    LOG.error("Fail to decode IncrementAndGetRequest", e);
-                }
-                // follower ignore read operation
-//                if (counterOperation != null && counterOperation.isReadOp()) {
-//                    iter.next();
-//                    continue;
-//                }
+                serviceDiscoveryOperation = ServiceDiscoveryOperation.deserialize(data);
             }
 
-            if (serviceOperation != null) {
-                ServiceOperation.Kind kind = serviceOperation.getKind();
+            if (serviceDiscoveryOperation != null) {
+                ServiceDiscoveryOperation.Kind kind = serviceDiscoveryOperation.getKind();
                 switch (kind) {
                     case REGISTRATION:
                         // 写入内存操作
-                        register((ServiceInstance) serviceOperation.getValue());
+                        register((ServiceInstance) serviceDiscoveryOperation.getData());
                         break;
                 }
 
                 if (closure != null) {
-                    // closure.success();
                     closure.run(Status.OK());
                 }
             }
-
 
             iter.next();
         }
@@ -138,17 +122,17 @@ public class ServiceRegistrationStateMachine extends StateMachineAdapter {
     @Override
     public void onSnapshotSave(final SnapshotWriter writer, final Closure done) {
         executor.submit(() -> {
-            final ServiceRegistrationSnapshotFile snapshot = new ServiceRegistrationSnapshotFile(writer.getPath() + File.separator + "data");
-            // TODO
-//            if (snapshot.save(currVal)) {
-//                if (writer.addFile("data")) {
-//                    done.run(Status.OK());
-//                } else {
-//                    done.run(new Status(RaftError.EIO, "Fail to add file to writer"));
-//                }
-//            } else {
-//                done.run(new Status(RaftError.EIO, "Fail to save counter snapshot %s", snapshot.getPath()));
-//            }
+            final ServiceDiscoverySnapshotFile snapshot = new ServiceDiscoverySnapshotFile(writer.getPath() + File.separator + "data");
+
+            if (snapshot.save(this.serviceNameToInstancesStorage)) {
+                if (writer.addFile("data")) {
+                    done.run(Status.OK());
+                } else {
+                    done.run(new Status(RaftError.EIO, "Fail to add file to writer"));
+                }
+            } else {
+                done.run(new Status(RaftError.EIO, "Fail to save counter snapshot %s", snapshot.getFile()));
+            }
         });
     }
 
@@ -167,13 +151,13 @@ public class ServiceRegistrationStateMachine extends StateMachineAdapter {
             LOG.error("Fail to find data file in {}", reader.getPath());
             return false;
         }
-        final ServiceRegistrationSnapshotFile snapshot = new ServiceRegistrationSnapshotFile(reader.getPath() + File.separator + "data");
+        final ServiceDiscoverySnapshotFile snapshot = new ServiceDiscoverySnapshotFile(reader.getPath() + File.separator + "data");
         try {
-            // TODO
-            // this.value.set(snapshot.load());
+            Map data = snapshot.load();
+            serviceNameToInstancesStorage.putAll(data);
             return true;
         } catch (Throwable e) {
-            LOG.error("Fail to load snapshot from {}", snapshot.getPath());
+            LOG.error("Fail to load snapshot from {}", snapshot.getFile());
             return false;
         }
 
@@ -183,7 +167,6 @@ public class ServiceRegistrationStateMachine extends StateMachineAdapter {
     public void onLeaderStart(final long term) {
         this.leaderTerm.set(term);
         super.onLeaderStart(term);
-
     }
 
     @Override
@@ -192,4 +175,8 @@ public class ServiceRegistrationStateMachine extends StateMachineAdapter {
         super.onLeaderStop(status);
     }
 
+    @Override
+    public void onStartFollowing(LeaderChangeContext ctx) {
+        super.onStartFollowing(ctx);
+    }
 }

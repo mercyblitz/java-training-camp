@@ -14,53 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.acme.middleware.rpc.service.registry.jraft;
+package com.acme.middleware.rpc.service.discovery;
 
 import com.acme.middleware.rpc.service.ServiceInstance;
-import com.sun.tools.javac.util.List;
 
-import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+
+import static com.acme.middleware.rpc.util.ServiceLoaders.loadDefault;
 
 /**
- * 服务操作
+ * 服务发现与注册
  *
  * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
- * @see com.acme.middleware.rpc.service.registry.ServiceRegistry
  * @since 1.0.0
  */
-public class ServiceOperation<V> implements Serializable {
+public interface ServiceDiscovery {
 
-    private final Kind kind;
+    ServiceDiscovery DEFAULT = loadDefault(ServiceDiscovery.class);
 
-    private final V value;
+    void initialize(Map<String, Object> config);
 
-    public ServiceOperation(Kind kind, V value) {
-        this.kind = kind;
-        this.value = value;
-    }
+    void register(ServiceInstance serviceInstance);
 
-    public Kind getKind() {
-        return kind;
-    }
+    void deregister(ServiceInstance serviceInstance);
 
+    List<ServiceInstance> getServiceInstances(String serviceName);
 
-    public V getValue() {
-        return value;
-    }
+    void close();
 
-
-    public enum Kind {
-
-        REGISTRATION(ServiceInstance.class),
-
-        DEREGISTRATION(ServiceInstance.class),
-
-        GET_SERVICE_INSTANCES(List.class);
-
-        private final Class<?> valueType;
-
-        Kind(Class<?> valueType) {
-            this.valueType = valueType;
-        }
-    }
 }

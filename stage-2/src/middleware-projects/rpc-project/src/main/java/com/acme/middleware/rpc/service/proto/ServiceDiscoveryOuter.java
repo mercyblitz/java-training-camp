@@ -3,8 +3,8 @@
 
 package com.acme.middleware.rpc.service.proto;
 
-public final class ServiceDiscoveryOutter {
-  private ServiceDiscoveryOutter() {}
+public final class ServiceDiscoveryOuter {
+  private ServiceDiscoveryOuter() {}
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistryLite registry) {
   }
@@ -14,8 +14,8 @@ public final class ServiceDiscoveryOutter {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-  public interface ServiceInstanceRegistrationRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:service.ServiceInstanceRegistrationRequest)
+  public interface RegistrationRequestOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:service.RegistrationRequest)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -97,18 +97,18 @@ String defaultValue);
         String key);
   }
   /**
-   * Protobuf type {@code service.ServiceInstanceRegistrationRequest}
+   * Protobuf type {@code service.RegistrationRequest}
    */
-  public static final class ServiceInstanceRegistrationRequest extends
+  public static final class RegistrationRequest extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:service.ServiceInstanceRegistrationRequest)
-      ServiceInstanceRegistrationRequestOrBuilder {
+      // @@protoc_insertion_point(message_implements:service.RegistrationRequest)
+      RegistrationRequestOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use ServiceInstanceRegistrationRequest.newBuilder() to construct.
-    private ServiceInstanceRegistrationRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // Use RegistrationRequest.newBuilder() to construct.
+    private RegistrationRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private ServiceInstanceRegistrationRequest() {
+    private RegistrationRequest() {
       id_ = "";
       serviceName_ = "";
       host_ = "";
@@ -118,7 +118,7 @@ String defaultValue);
     @SuppressWarnings({"unused"})
     protected Object newInstance(
         UnusedPrivateParameter unused) {
-      return new ServiceInstanceRegistrationRequest();
+      return new RegistrationRequest();
     }
 
     @Override
@@ -128,7 +128,7 @@ String defaultValue);
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return ServiceDiscoveryOutter.internal_static_service_ServiceInstanceRegistrationRequest_descriptor;
+      return ServiceDiscoveryOuter.internal_static_service_RegistrationRequest_descriptor;
     }
 
     @SuppressWarnings({"rawtypes"})
@@ -146,9 +146,9 @@ String defaultValue);
     @Override
     protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ServiceDiscoveryOutter.internal_static_service_ServiceInstanceRegistrationRequest_fieldAccessorTable
+      return ServiceDiscoveryOuter.internal_static_service_RegistrationRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              ServiceInstanceRegistrationRequest.class, Builder.class);
+              RegistrationRequest.class, Builder.class);
     }
 
     public static final int ID_FIELD_NUMBER = 1;
@@ -282,7 +282,7 @@ String defaultValue);
           String, String> defaultEntry =
               com.google.protobuf.MapEntry
               .<String, String>newDefaultInstance(
-                  ServiceDiscoveryOutter.internal_static_service_ServiceInstanceRegistrationRequest_MetadataEntry_descriptor,
+                  ServiceDiscoveryOuter.internal_static_service_RegistrationRequest_MetadataEntry_descriptor,
                   com.google.protobuf.WireFormat.FieldType.STRING,
                   "",
                   com.google.protobuf.WireFormat.FieldType.STRING,
@@ -431,10 +431,10 @@ String defaultValue);
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof ServiceInstanceRegistrationRequest)) {
+      if (!(obj instanceof RegistrationRequest)) {
         return super.equals(obj);
       }
-      ServiceInstanceRegistrationRequest other = (ServiceInstanceRegistrationRequest) obj;
+      RegistrationRequest other = (RegistrationRequest) obj;
 
       if (!getId()
           .equals(other.getId())) return false;
@@ -474,69 +474,69 @@ String defaultValue);
       return hash;
     }
 
-    public static ServiceInstanceRegistrationRequest parseFrom(
+    public static RegistrationRequest parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static ServiceInstanceRegistrationRequest parseFrom(
+    public static RegistrationRequest parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static ServiceInstanceRegistrationRequest parseFrom(
+    public static RegistrationRequest parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static ServiceInstanceRegistrationRequest parseFrom(
+    public static RegistrationRequest parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static ServiceInstanceRegistrationRequest parseFrom(byte[] data)
+    public static RegistrationRequest parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static ServiceInstanceRegistrationRequest parseFrom(
+    public static RegistrationRequest parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static ServiceInstanceRegistrationRequest parseFrom(java.io.InputStream input)
+    public static RegistrationRequest parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static ServiceInstanceRegistrationRequest parseFrom(
+    public static RegistrationRequest parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static ServiceInstanceRegistrationRequest parseDelimitedFrom(java.io.InputStream input)
+    public static RegistrationRequest parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static ServiceInstanceRegistrationRequest parseDelimitedFrom(
+    public static RegistrationRequest parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static ServiceInstanceRegistrationRequest parseFrom(
+    public static RegistrationRequest parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static ServiceInstanceRegistrationRequest parseFrom(
+    public static RegistrationRequest parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -549,7 +549,7 @@ String defaultValue);
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(ServiceInstanceRegistrationRequest prototype) {
+    public static Builder newBuilder(RegistrationRequest prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @Override
@@ -565,15 +565,15 @@ String defaultValue);
       return builder;
     }
     /**
-     * Protobuf type {@code service.ServiceInstanceRegistrationRequest}
+     * Protobuf type {@code service.RegistrationRequest}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:service.ServiceInstanceRegistrationRequest)
-        ServiceInstanceRegistrationRequestOrBuilder {
+        // @@protoc_insertion_point(builder_implements:service.RegistrationRequest)
+        RegistrationRequestOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return ServiceDiscoveryOutter.internal_static_service_ServiceInstanceRegistrationRequest_descriptor;
+        return ServiceDiscoveryOuter.internal_static_service_RegistrationRequest_descriptor;
       }
 
       @SuppressWarnings({"rawtypes"})
@@ -601,12 +601,12 @@ String defaultValue);
       @Override
       protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ServiceDiscoveryOutter.internal_static_service_ServiceInstanceRegistrationRequest_fieldAccessorTable
+        return ServiceDiscoveryOuter.internal_static_service_RegistrationRequest_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                ServiceInstanceRegistrationRequest.class, Builder.class);
+                RegistrationRequest.class, Builder.class);
       }
 
-      // Construct using com.acme.middleware.rpc.service.proto.ServiceDiscoveryOutter.ServiceInstanceRegistrationRequest.newBuilder()
+      // Construct using com.acme.middleware.rpc.service.proto.ServiceDiscoveryOuter.RegistrationRequest.newBuilder()
       private Builder() {
 
       }
@@ -634,17 +634,17 @@ String defaultValue);
       @Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return ServiceDiscoveryOutter.internal_static_service_ServiceInstanceRegistrationRequest_descriptor;
+        return ServiceDiscoveryOuter.internal_static_service_RegistrationRequest_descriptor;
       }
 
       @Override
-      public ServiceInstanceRegistrationRequest getDefaultInstanceForType() {
-        return ServiceInstanceRegistrationRequest.getDefaultInstance();
+      public RegistrationRequest getDefaultInstanceForType() {
+        return RegistrationRequest.getDefaultInstance();
       }
 
       @Override
-      public ServiceInstanceRegistrationRequest build() {
-        ServiceInstanceRegistrationRequest result = buildPartial();
+      public RegistrationRequest build() {
+        RegistrationRequest result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -652,8 +652,8 @@ String defaultValue);
       }
 
       @Override
-      public ServiceInstanceRegistrationRequest buildPartial() {
-        ServiceInstanceRegistrationRequest result = new ServiceInstanceRegistrationRequest(this);
+      public RegistrationRequest buildPartial() {
+        RegistrationRequest result = new RegistrationRequest(this);
         int from_bitField0_ = bitField0_;
         result.id_ = id_;
         result.serviceName_ = serviceName_;
@@ -699,16 +699,16 @@ String defaultValue);
       }
       @Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof ServiceInstanceRegistrationRequest) {
-          return mergeFrom((ServiceInstanceRegistrationRequest)other);
+        if (other instanceof RegistrationRequest) {
+          return mergeFrom((RegistrationRequest)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(ServiceInstanceRegistrationRequest other) {
-        if (other == ServiceInstanceRegistrationRequest.getDefaultInstance()) return this;
+      public Builder mergeFrom(RegistrationRequest other) {
+        if (other == RegistrationRequest.getDefaultInstance()) return this;
         if (!other.getId().isEmpty()) {
           id_ = other.id_;
           onChanged();
@@ -1199,23 +1199,23 @@ String defaultValue);
       }
 
 
-      // @@protoc_insertion_point(builder_scope:service.ServiceInstanceRegistrationRequest)
+      // @@protoc_insertion_point(builder_scope:service.RegistrationRequest)
     }
 
-    // @@protoc_insertion_point(class_scope:service.ServiceInstanceRegistrationRequest)
-    private static final ServiceInstanceRegistrationRequest DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:service.RegistrationRequest)
+    private static final RegistrationRequest DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new ServiceInstanceRegistrationRequest();
+      DEFAULT_INSTANCE = new RegistrationRequest();
     }
 
-    public static ServiceInstanceRegistrationRequest getDefaultInstance() {
+    public static RegistrationRequest getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<ServiceInstanceRegistrationRequest>
-        PARSER = new com.google.protobuf.AbstractParser<ServiceInstanceRegistrationRequest>() {
+    private static final com.google.protobuf.Parser<RegistrationRequest>
+        PARSER = new com.google.protobuf.AbstractParser<RegistrationRequest>() {
       @Override
-      public ServiceInstanceRegistrationRequest parsePartialFrom(
+      public RegistrationRequest parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1234,24 +1234,24 @@ String defaultValue);
       }
     };
 
-    public static com.google.protobuf.Parser<ServiceInstanceRegistrationRequest> parser() {
+    public static com.google.protobuf.Parser<RegistrationRequest> parser() {
       return PARSER;
     }
 
     @Override
-    public com.google.protobuf.Parser<ServiceInstanceRegistrationRequest> getParserForType() {
+    public com.google.protobuf.Parser<RegistrationRequest> getParserForType() {
       return PARSER;
     }
 
     @Override
-    public ServiceInstanceRegistrationRequest getDefaultInstanceForType() {
+    public RegistrationRequest getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
-  public interface ServiceInstanceRegistrationResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:service.ServiceInstanceRegistrationResponse)
+  public interface ResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:service.Response)
       com.google.protobuf.MessageOrBuilder {
 
     /**
@@ -1273,18 +1273,18 @@ String defaultValue);
         getMessageBytes();
   }
   /**
-   * Protobuf type {@code service.ServiceInstanceRegistrationResponse}
+   * Protobuf type {@code service.Response}
    */
-  public static final class ServiceInstanceRegistrationResponse extends
+  public static final class Response extends
       com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:service.ServiceInstanceRegistrationResponse)
-      ServiceInstanceRegistrationResponseOrBuilder {
+      // @@protoc_insertion_point(message_implements:service.Response)
+      ResponseOrBuilder {
   private static final long serialVersionUID = 0L;
-    // Use ServiceInstanceRegistrationResponse.newBuilder() to construct.
-    private ServiceInstanceRegistrationResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    // Use Response.newBuilder() to construct.
+    private Response(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
-    private ServiceInstanceRegistrationResponse() {
+    private Response() {
       message_ = "";
     }
 
@@ -1292,7 +1292,7 @@ String defaultValue);
     @SuppressWarnings({"unused"})
     protected Object newInstance(
         UnusedPrivateParameter unused) {
-      return new ServiceInstanceRegistrationResponse();
+      return new Response();
     }
 
     @Override
@@ -1302,15 +1302,15 @@ String defaultValue);
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return ServiceDiscoveryOutter.internal_static_service_ServiceInstanceRegistrationResponse_descriptor;
+      return ServiceDiscoveryOuter.internal_static_service_Response_descriptor;
     }
 
     @Override
     protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ServiceDiscoveryOutter.internal_static_service_ServiceInstanceRegistrationResponse_fieldAccessorTable
+      return ServiceDiscoveryOuter.internal_static_service_Response_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              ServiceInstanceRegistrationResponse.class, Builder.class);
+              Response.class, Builder.class);
     }
 
     public static final int CODE_FIELD_NUMBER = 1;
@@ -1408,10 +1408,10 @@ String defaultValue);
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof ServiceInstanceRegistrationResponse)) {
+      if (!(obj instanceof Response)) {
         return super.equals(obj);
       }
-      ServiceInstanceRegistrationResponse other = (ServiceInstanceRegistrationResponse) obj;
+      Response other = (Response) obj;
 
       if (getCode()
           != other.getCode()) return false;
@@ -1437,69 +1437,69 @@ String defaultValue);
       return hash;
     }
 
-    public static ServiceInstanceRegistrationResponse parseFrom(
+    public static Response parseFrom(
         java.nio.ByteBuffer data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static ServiceInstanceRegistrationResponse parseFrom(
+    public static Response parseFrom(
         java.nio.ByteBuffer data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static ServiceInstanceRegistrationResponse parseFrom(
+    public static Response parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static ServiceInstanceRegistrationResponse parseFrom(
+    public static Response parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static ServiceInstanceRegistrationResponse parseFrom(byte[] data)
+    public static Response parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static ServiceInstanceRegistrationResponse parseFrom(
+    public static Response parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static ServiceInstanceRegistrationResponse parseFrom(java.io.InputStream input)
+    public static Response parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static ServiceInstanceRegistrationResponse parseFrom(
+    public static Response parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static ServiceInstanceRegistrationResponse parseDelimitedFrom(java.io.InputStream input)
+    public static Response parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static ServiceInstanceRegistrationResponse parseDelimitedFrom(
+    public static Response parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static ServiceInstanceRegistrationResponse parseFrom(
+    public static Response parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static ServiceInstanceRegistrationResponse parseFrom(
+    public static Response parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1512,7 +1512,7 @@ String defaultValue);
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(ServiceInstanceRegistrationResponse prototype) {
+    public static Builder newBuilder(Response prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @Override
@@ -1528,26 +1528,26 @@ String defaultValue);
       return builder;
     }
     /**
-     * Protobuf type {@code service.ServiceInstanceRegistrationResponse}
+     * Protobuf type {@code service.Response}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:service.ServiceInstanceRegistrationResponse)
-        ServiceInstanceRegistrationResponseOrBuilder {
+        // @@protoc_insertion_point(builder_implements:service.Response)
+        ResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return ServiceDiscoveryOutter.internal_static_service_ServiceInstanceRegistrationResponse_descriptor;
+        return ServiceDiscoveryOuter.internal_static_service_Response_descriptor;
       }
 
       @Override
       protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ServiceDiscoveryOutter.internal_static_service_ServiceInstanceRegistrationResponse_fieldAccessorTable
+        return ServiceDiscoveryOuter.internal_static_service_Response_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                ServiceInstanceRegistrationResponse.class, Builder.class);
+                Response.class, Builder.class);
       }
 
-      // Construct using com.acme.middleware.rpc.service.proto.ServiceDiscoveryOutter.ServiceInstanceRegistrationResponse.newBuilder()
+      // Construct using com.acme.middleware.rpc.service.proto.ServiceDiscoveryOuter.Response.newBuilder()
       private Builder() {
 
       }
@@ -1570,17 +1570,17 @@ String defaultValue);
       @Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return ServiceDiscoveryOutter.internal_static_service_ServiceInstanceRegistrationResponse_descriptor;
+        return ServiceDiscoveryOuter.internal_static_service_Response_descriptor;
       }
 
       @Override
-      public ServiceInstanceRegistrationResponse getDefaultInstanceForType() {
-        return ServiceInstanceRegistrationResponse.getDefaultInstance();
+      public Response getDefaultInstanceForType() {
+        return Response.getDefaultInstance();
       }
 
       @Override
-      public ServiceInstanceRegistrationResponse build() {
-        ServiceInstanceRegistrationResponse result = buildPartial();
+      public Response build() {
+        Response result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -1588,8 +1588,8 @@ String defaultValue);
       }
 
       @Override
-      public ServiceInstanceRegistrationResponse buildPartial() {
-        ServiceInstanceRegistrationResponse result = new ServiceInstanceRegistrationResponse(this);
+      public Response buildPartial() {
+        Response result = new Response(this);
         result.code_ = code_;
         result.message_ = message_;
         onBuilt();
@@ -1630,16 +1630,16 @@ String defaultValue);
       }
       @Override
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof ServiceInstanceRegistrationResponse) {
-          return mergeFrom((ServiceInstanceRegistrationResponse)other);
+        if (other instanceof Response) {
+          return mergeFrom((Response)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(ServiceInstanceRegistrationResponse other) {
-        if (other == ServiceInstanceRegistrationResponse.getDefaultInstance()) return this;
+      public Builder mergeFrom(Response other) {
+        if (other == Response.getDefaultInstance()) return this;
         if (other.getCode() != 0) {
           setCode(other.getCode());
         }
@@ -1818,23 +1818,23 @@ String defaultValue);
       }
 
 
-      // @@protoc_insertion_point(builder_scope:service.ServiceInstanceRegistrationResponse)
+      // @@protoc_insertion_point(builder_scope:service.Response)
     }
 
-    // @@protoc_insertion_point(class_scope:service.ServiceInstanceRegistrationResponse)
-    private static final ServiceInstanceRegistrationResponse DEFAULT_INSTANCE;
+    // @@protoc_insertion_point(class_scope:service.Response)
+    private static final Response DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new ServiceInstanceRegistrationResponse();
+      DEFAULT_INSTANCE = new Response();
     }
 
-    public static ServiceInstanceRegistrationResponse getDefaultInstance() {
+    public static Response getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    private static final com.google.protobuf.Parser<ServiceInstanceRegistrationResponse>
-        PARSER = new com.google.protobuf.AbstractParser<ServiceInstanceRegistrationResponse>() {
+    private static final com.google.protobuf.Parser<Response>
+        PARSER = new com.google.protobuf.AbstractParser<Response>() {
       @Override
-      public ServiceInstanceRegistrationResponse parsePartialFrom(
+      public Response parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
@@ -1853,17 +1853,17 @@ String defaultValue);
       }
     };
 
-    public static com.google.protobuf.Parser<ServiceInstanceRegistrationResponse> parser() {
+    public static com.google.protobuf.Parser<Response> parser() {
       return PARSER;
     }
 
     @Override
-    public com.google.protobuf.Parser<ServiceInstanceRegistrationResponse> getParserForType() {
+    public com.google.protobuf.Parser<Response> getParserForType() {
       return PARSER;
     }
 
     @Override
-    public ServiceInstanceRegistrationResponse getDefaultInstanceForType() {
+    public Response getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -1915,13 +1915,13 @@ String defaultValue);
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return ServiceDiscoveryOutter.internal_static_service_ServiceInstancesQueryRequest_descriptor;
+      return ServiceDiscoveryOuter.internal_static_service_ServiceInstancesQueryRequest_descriptor;
     }
 
     @Override
     protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ServiceDiscoveryOutter.internal_static_service_ServiceInstancesQueryRequest_fieldAccessorTable
+      return ServiceDiscoveryOuter.internal_static_service_ServiceInstancesQueryRequest_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               ServiceInstancesQueryRequest.class, Builder.class);
     }
@@ -2127,18 +2127,18 @@ String defaultValue);
         ServiceInstancesQueryRequestOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return ServiceDiscoveryOutter.internal_static_service_ServiceInstancesQueryRequest_descriptor;
+        return ServiceDiscoveryOuter.internal_static_service_ServiceInstancesQueryRequest_descriptor;
       }
 
       @Override
       protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ServiceDiscoveryOutter.internal_static_service_ServiceInstancesQueryRequest_fieldAccessorTable
+        return ServiceDiscoveryOuter.internal_static_service_ServiceInstancesQueryRequest_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
                 ServiceInstancesQueryRequest.class, Builder.class);
       }
 
-      // Construct using com.acme.middleware.rpc.service.proto.ServiceDiscoveryOutter.ServiceInstancesQueryRequest.newBuilder()
+      // Construct using com.acme.middleware.rpc.service.proto.ServiceDiscoveryOuter.ServiceInstancesQueryRequest.newBuilder()
       private Builder() {
 
       }
@@ -2159,7 +2159,7 @@ String defaultValue);
       @Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return ServiceDiscoveryOutter.internal_static_service_ServiceInstancesQueryRequest_descriptor;
+        return ServiceDiscoveryOuter.internal_static_service_ServiceInstancesQueryRequest_descriptor;
       }
 
       @Override
@@ -2464,13 +2464,13 @@ String defaultValue);
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return ServiceDiscoveryOutter.internal_static_service_ServiceInstancesQueryResponse_descriptor;
+      return ServiceDiscoveryOuter.internal_static_service_ServiceInstancesQueryResponse_descriptor;
     }
 
     @Override
     protected FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return ServiceDiscoveryOutter.internal_static_service_ServiceInstancesQueryResponse_fieldAccessorTable
+      return ServiceDiscoveryOuter.internal_static_service_ServiceInstancesQueryResponse_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               ServiceInstancesQueryResponse.class, Builder.class);
     }
@@ -2676,18 +2676,18 @@ String defaultValue);
         ServiceInstancesQueryResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return ServiceDiscoveryOutter.internal_static_service_ServiceInstancesQueryResponse_descriptor;
+        return ServiceDiscoveryOuter.internal_static_service_ServiceInstancesQueryResponse_descriptor;
       }
 
       @Override
       protected FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return ServiceDiscoveryOutter.internal_static_service_ServiceInstancesQueryResponse_fieldAccessorTable
+        return ServiceDiscoveryOuter.internal_static_service_ServiceInstancesQueryResponse_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
                 ServiceInstancesQueryResponse.class, Builder.class);
       }
 
-      // Construct using com.acme.middleware.rpc.service.proto.ServiceDiscoveryOutter.ServiceInstancesQueryResponse.newBuilder()
+      // Construct using com.acme.middleware.rpc.service.proto.ServiceDiscoveryOuter.ServiceInstancesQueryResponse.newBuilder()
       private Builder() {
 
       }
@@ -2708,7 +2708,7 @@ String defaultValue);
       @Override
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return ServiceDiscoveryOutter.internal_static_service_ServiceInstancesQueryResponse_descriptor;
+        return ServiceDiscoveryOuter.internal_static_service_ServiceInstancesQueryResponse_descriptor;
       }
 
       @Override
@@ -2968,20 +2968,20 @@ String defaultValue);
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_service_ServiceInstanceRegistrationRequest_descriptor;
+    internal_static_service_RegistrationRequest_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_service_ServiceInstanceRegistrationRequest_fieldAccessorTable;
+      internal_static_service_RegistrationRequest_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_service_ServiceInstanceRegistrationRequest_MetadataEntry_descriptor;
+    internal_static_service_RegistrationRequest_MetadataEntry_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_service_ServiceInstanceRegistrationRequest_MetadataEntry_fieldAccessorTable;
+      internal_static_service_RegistrationRequest_MetadataEntry_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_service_ServiceInstanceRegistrationResponse_descriptor;
+    internal_static_service_Response_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_service_ServiceInstanceRegistrationResponse_fieldAccessorTable;
+      internal_static_service_Response_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_service_ServiceInstancesQueryRequest_descriptor;
   private static final 
@@ -3001,41 +3001,40 @@ String defaultValue);
       descriptor;
   static {
     String[] descriptorData = {
-      "\n\027service-discovery.proto\022\007service\"\337\001\n\"S" +
-      "erviceInstanceRegistrationRequest\022\n\n\002id\030" +
-      "\001 \001(\t\022\023\n\013serviceName\030\002 \001(\t\022\014\n\004host\030\003 \001(\t" +
-      "\022\014\n\004port\030\004 \001(\005\022K\n\010metadata\030\005 \003(\01329.servi" +
-      "ce.ServiceInstanceRegistrationRequest.Me" +
-      "tadataEntry\032/\n\rMetadataEntry\022\013\n\003key\030\001 \001(" +
-      "\t\022\r\n\005value\030\002 \001(\t:\0028\001\"D\n#ServiceInstanceR" +
-      "egistrationResponse\022\014\n\004code\030\001 \001(\005\022\017\n\007mes" +
-      "sage\030\002 \001(\t\"3\n\034ServiceInstancesQueryReque" +
-      "st\022\023\n\013serviceName\030\001 \001(\t\"4\n\035ServiceInstan" +
-      "cesQueryResponse\022\023\n\013serviceName\030\001 \001(\tB?\n" +
-      "%com.acme.middleware.rpc.service.protoB\026" +
-      "ServiceDiscoveryOutterb\006proto3"
+      "\n\027service-discovery.proto\022\007service\"\301\001\n\023R" +
+      "egistrationRequest\022\n\n\002id\030\001 \001(\t\022\023\n\013servic" +
+      "eName\030\002 \001(\t\022\014\n\004host\030\003 \001(\t\022\014\n\004port\030\004 \001(\005\022" +
+      "<\n\010metadata\030\005 \003(\0132*.service.Registration" +
+      "Request.MetadataEntry\032/\n\rMetadataEntry\022\013" +
+      "\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t:\0028\001\")\n\010Respon" +
+      "se\022\014\n\004code\030\001 \001(\005\022\017\n\007message\030\002 \001(\t\"3\n\034Ser" +
+      "viceInstancesQueryRequest\022\023\n\013serviceName" +
+      "\030\001 \001(\t\"4\n\035ServiceInstancesQueryResponse\022" +
+      "\023\n\013serviceName\030\001 \001(\tB>\n%com.acme.middlew" +
+      "are.rpc.service.protoB\025ServiceDiscoveryO" +
+      "uterb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         });
-    internal_static_service_ServiceInstanceRegistrationRequest_descriptor =
+    internal_static_service_RegistrationRequest_descriptor =
       getDescriptor().getMessageTypes().get(0);
-    internal_static_service_ServiceInstanceRegistrationRequest_fieldAccessorTable = new
+    internal_static_service_RegistrationRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_service_ServiceInstanceRegistrationRequest_descriptor,
+        internal_static_service_RegistrationRequest_descriptor,
         new String[] { "Id", "ServiceName", "Host", "Port", "Metadata", });
-    internal_static_service_ServiceInstanceRegistrationRequest_MetadataEntry_descriptor =
-      internal_static_service_ServiceInstanceRegistrationRequest_descriptor.getNestedTypes().get(0);
-    internal_static_service_ServiceInstanceRegistrationRequest_MetadataEntry_fieldAccessorTable = new
+    internal_static_service_RegistrationRequest_MetadataEntry_descriptor =
+      internal_static_service_RegistrationRequest_descriptor.getNestedTypes().get(0);
+    internal_static_service_RegistrationRequest_MetadataEntry_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_service_ServiceInstanceRegistrationRequest_MetadataEntry_descriptor,
+        internal_static_service_RegistrationRequest_MetadataEntry_descriptor,
         new String[] { "Key", "Value", });
-    internal_static_service_ServiceInstanceRegistrationResponse_descriptor =
+    internal_static_service_Response_descriptor =
       getDescriptor().getMessageTypes().get(1);
-    internal_static_service_ServiceInstanceRegistrationResponse_fieldAccessorTable = new
+    internal_static_service_Response_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_service_ServiceInstanceRegistrationResponse_descriptor,
+        internal_static_service_Response_descriptor,
         new String[] { "Code", "Message", });
     internal_static_service_ServiceInstancesQueryRequest_descriptor =
       getDescriptor().getMessageTypes().get(2);
