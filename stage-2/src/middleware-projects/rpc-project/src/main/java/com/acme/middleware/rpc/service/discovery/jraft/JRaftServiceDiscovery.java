@@ -92,7 +92,7 @@ public class JRaftServiceDiscovery implements ServiceDiscovery {
 
         //注册成功后,启动心跳线程服务
         ServiceDiscoveryHeartBeat heartBeatTask = new ServiceDiscoveryHeartBeat(serviceInstance, client);
-        //this.heartbeatExecutor.scheduleWithFixedDelay(heartBeatTask, 0, 5, TimeUnit.SECONDS);
+        this.heartbeatExecutor.scheduleWithFixedDelay(heartBeatTask, 0, 5, TimeUnit.SECONDS);
     }
 
     @Override
