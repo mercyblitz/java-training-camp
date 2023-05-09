@@ -55,6 +55,7 @@ public class ServiceDiscoveryServer {
         // register business processor
         rpcServer.registerProcessor(new RegistrationRpcProcessor(this));
         rpcServer.registerProcessor(new GetServiceInstancesRequestRpcProcessor(this));
+        rpcServer.registerProcessor(new HeartBeatRpcProcessor(this));
         // TODO
 
         // init state machine
@@ -71,6 +72,11 @@ public class ServiceDiscoveryServer {
         // start raft node
         this.node = this.raftGroupService.start();
         this.fsm.setNode(this.node);
+
+        //心跳检查线程
+        Thread beatCheckThread = new ServiceInstanceBeatThread(this.fsm);
+        beatCheckThread.setDaemon(true);
+        beatCheckThread.start();
     }
 
     public ServiceDiscoveryStateMachine getFsm() {

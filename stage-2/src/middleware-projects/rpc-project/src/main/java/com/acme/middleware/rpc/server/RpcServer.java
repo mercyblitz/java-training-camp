@@ -39,7 +39,6 @@ import io.netty.handler.logging.LoggingHandler;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * 调用服务器
@@ -76,13 +75,18 @@ public class RpcServer implements AutoCloseable {
 
     private ServiceInstance createLocalServiceInstance() throws Exception {
         DefaultServiceInstance serviceInstance = new DefaultServiceInstance();
-        serviceInstance.setId(UUID.randomUUID().toString());
-        serviceInstance.setHost(ContextUtil.getLocalHostName());
+        String host = ContextUtil.getLocalHostName();
+        serviceInstance.setId(generateInstanceId(host, applicationName, port));
+        serviceInstance.setHost(host);
         serviceInstance.setPort(port);
         serviceInstance.setServiceName(applicationName);
         // TODO
         serviceInstance.setMetadata(new HashMap<>());
         return serviceInstance;
+    }
+
+    private String generateInstanceId(String host, String serviceName, int port) {
+        return String.format("%s-%s-%d", host, serviceName, port);
     }
 
     public RpcServer registerService(String serviceName, Object service) {
@@ -114,6 +118,8 @@ public class RpcServer implements AutoCloseable {
         ChannelFuture channelFuture = bootstrap.bind(port);
         // 注册服务
         registerServer();
+        //监听shutdown hook
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> serviceDiscovery.deregister(localServiceInstance)));
         try {
             channel = channelFuture.sync().channel();
             channel.closeFuture().sync();
