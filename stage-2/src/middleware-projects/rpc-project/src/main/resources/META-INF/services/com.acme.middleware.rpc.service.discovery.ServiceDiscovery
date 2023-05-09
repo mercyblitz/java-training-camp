@@ -1,0 +1,2 @@
+# com.acme.middleware.rpc.service.discovery.FileSystemServiceDiscovery
+com.acme.middleware.rpc.service.discovery.jraft.JRaftServiceDiscovery

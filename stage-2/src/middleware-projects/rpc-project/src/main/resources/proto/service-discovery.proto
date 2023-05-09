@@ -1,29 +1,30 @@
 syntax = "proto3";
 
-package service;
+package service.discovery;
 
-option java_package = "com.acme.middleware.rpc.service.proto";
-option java_outer_classname = "ServiceDiscoveryOutter";
+option java_package = "com.acme.middleware.rpc.service.discovery.proto";
+option java_outer_classname = "ServiceDiscoveryOuter";
 
-message ServiceInstanceRegistrationRequest {
+message Registration {
   string id = 1;
   string serviceName = 2;
   string host = 3;
   int32 port = 4;
   map<string, string> metadata = 5;
+  optional bool reversed = 6;
 }
 
-message ServiceInstanceRegistrationResponse {
+message Response {
   int32 code = 1;
-  string message = 2;
+  optional string message = 2;
 }
 
-message ServiceInstancesQueryRequest {
+message GetServiceInstancesRequest {
   string serviceName = 1;
 }
 
-message ServiceInstancesQueryResponse {
-  string serviceName = 1;
+message GetServiceInstancesResponse {
+  repeated Registration value = 1;
 }
 
 

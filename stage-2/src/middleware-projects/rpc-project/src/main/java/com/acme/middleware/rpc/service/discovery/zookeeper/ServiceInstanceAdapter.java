@@ -14,26 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.acme.middleware.rpc.service.registry.jraft;
+package com.acme.middleware.rpc.service.discovery.zookeeper;
 
-import com.alipay.sofa.jraft.Closure;
-import com.alipay.sofa.jraft.Status;
+import com.acme.middleware.rpc.service.ServiceInstance;
 
 /**
- * 服务操作回调
+ * Zookeeper {@link ServiceInstance} 适配实现
  *
  * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
  * @since 1.0.0
  */
-public abstract class ServiceOperationClosure implements Closure {
+public class ServiceInstanceAdapter {
 
-    private final ServiceOperation serviceOperation;
-
-    public ServiceOperationClosure(ServiceOperation serviceOperation) {
-        this.serviceOperation = serviceOperation;
-    }
-
-    public ServiceOperation getServiceOperation() {
-        return serviceOperation;
-    }
 }

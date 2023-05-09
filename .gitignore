@@ -67,3 +67,7 @@ compiler/.gradle/*
 
 # others
 build.txt
+
+# Projects
+.service-discovery
+echoService

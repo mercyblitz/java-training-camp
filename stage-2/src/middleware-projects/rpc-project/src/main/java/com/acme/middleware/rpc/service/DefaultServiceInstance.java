@@ -87,4 +87,15 @@ public class DefaultServiceInstance implements ServiceInstance {
     public void setMetadata(Map<String, String> metadata) {
         this.metadata = metadata;
     }
+
+    @Override
+    public String toString() {
+        return "DefaultServiceInstance{" +
+                "id='" + id + '\'' +
+                ", serviceName='" + serviceName + '\'' +
+                ", host='" + host + '\'' +
+                ", port=" + port +
+                ", metadata=" + metadata +
+                '}';
+    }
 }

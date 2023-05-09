@@ -14,33 +14,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.acme.middleware.rpc.service.registry;
+package com.acme.middleware.rpc.service.discovery.zookeeper;
 
 import com.acme.middleware.rpc.service.ServiceInstance;
+import com.acme.middleware.rpc.service.discovery.ServiceDiscovery;
 
 import java.util.List;
 import java.util.Map;
 
-import static com.acme.middleware.rpc.util.ServiceLoaders.loadDefault;
-
 /**
- * 服务注册中心
+ * Zookeeper 注册中心实现
  *
  * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
  * @since 1.0.0
  */
-public interface ServiceRegistry {
+public class ZookeeperServiceDiscovery implements ServiceDiscovery {
 
-    ServiceRegistry DEFAULT = loadDefault(ServiceRegistry.class);
+    @Override
+    public void initialize(Map<String, Object> config) {
 
-    void initialize(Map<String, Object> config);
+    }
 
-    void register(ServiceInstance serviceInstance);
+    @Override
+    public void register(ServiceInstance serviceInstance) {
 
-    void deregister(ServiceInstance serviceInstance);
+    }
 
-    List<ServiceInstance> getServiceInstances(String serviceName);
+    @Override
+    public void deregister(ServiceInstance serviceInstance) {
 
-    void close();
+    }
 
+    @Override
+    public List<ServiceInstance> getServiceInstances(String serviceName) {
+        return null;
+    }
+
+    @Override
+    public void close() {
+
+    }
 }
