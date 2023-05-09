@@ -61,6 +61,8 @@ public class ServiceDiscoveryServer {
         this.fsm = new ServiceDiscoveryStateMachine();
         // set fsm to nodeOptions
         nodeOptions.setFsm(this.fsm);
+        // set the InMemoryJRaftServiceFactory
+        nodeOptions.setServiceFactory(new InMemoryJRaftServiceFactory());
         // set storage path (log,meta,snapshot)
         // log, must
         nodeOptions.setLogUri(dataPath + File.separator + "log");

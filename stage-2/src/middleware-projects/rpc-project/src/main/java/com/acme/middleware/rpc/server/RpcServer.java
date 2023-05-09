@@ -37,6 +37,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
+import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -76,8 +77,7 @@ public class RpcServer implements AutoCloseable {
 
     private ServiceInstance createLocalServiceInstance() throws Exception {
         DefaultServiceInstance serviceInstance = new DefaultServiceInstance();
-        serviceInstance.setId(UUID.randomUUID().toString());
-        serviceInstance.setHost(ContextUtil.getLocalHostName());
+        serviceInstance.setHost(InetAddress.getLocalHost().getHostAddress());
         serviceInstance.setPort(port);
         serviceInstance.setServiceName(applicationName);
         // TODO
