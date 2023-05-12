@@ -14,6 +14,13 @@ message Registration {
   optional bool reversed = 6;
 }
 
+message HeartBeat {
+  string id = 1;
+  string serviceName = 2;
+  string host = 3;
+  int32 port = 4;
+}
+
 message Response {
   int32 code = 1;
   optional string message = 2;

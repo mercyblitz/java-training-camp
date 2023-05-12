@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static com.acme.middleware.rpc.service.discovery.jraft.RegistrationRpcProcessor.adaptServiceInstance;
 
@@ -44,6 +47,9 @@ public class JRaftServiceDiscovery implements ServiceDiscovery {
     public static final String REGISTRY_ADDRESS_PROPERTY_NAME = "service.discovery.jraft.registry.address";
 
     private static final Logger LOG = LoggerFactory.getLogger(JRaftServiceDiscovery.class);
+
+
+    private final ScheduledExecutorService heartbeatExecutor = Executors.newSingleThreadScheduledExecutor();
 
     private ServiceDiscoveryClient client;
 
@@ -83,6 +89,10 @@ public class JRaftServiceDiscovery implements ServiceDiscovery {
         } catch (Throwable e) {
             LOG.error("Fail to register a service instance : " + serviceInstance, e);
         }
+
+        //注册成功后,启动心跳线程服务
+        ServiceDiscoveryHeartBeat heartBeatTask = new ServiceDiscoveryHeartBeat(serviceInstance, client);
+        this.heartbeatExecutor.scheduleWithFixedDelay(heartBeatTask, 0, 5, TimeUnit.SECONDS);
     }
 
     @Override

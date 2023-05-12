@@ -91,6 +91,8 @@ public class ServiceDiscoveryOperation<V> implements Serializable {
 
         DEREGISTRATION,
 
-        GET_SERVICE_INSTANCES;
+        GET_SERVICE_INSTANCES,
+
+        BEAT;
     }
 }
