@@ -15,8 +15,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.acme.middleware.rpc.service.discovery.jraft;
+package com.acme.middleware.rpc.service.discovery.jraft.common;
 
+import com.acme.middleware.rpc.service.discovery.jraft.InMemoryJRaftServiceFactory;
+import com.acme.middleware.rpc.service.discovery.jraft.ServiceDiscoveryGrpcHelper;
 import com.alipay.sofa.jraft.Node;
 import com.alipay.sofa.jraft.RaftGroupService;
 import com.alipay.sofa.jraft.conf.Configuration;
@@ -28,34 +30,38 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ServiceLoader;
 
 import static com.acme.middleware.rpc.service.discovery.jraft.JRaftServiceDiscovery.DEFAULT_GROUP_ID_PROPERTY_VALUE;
 import static com.acme.middleware.rpc.service.discovery.jraft.JRaftServiceDiscovery.GROUP_ID_PROPERTY_NAME;
 
-
-public class ServiceDiscoveryServer {
+public class JRaftServer {
 
     private RaftGroupService raftGroupService;
 
     private Node node;
 
-    private ServiceDiscoveryStateMachine fsm;
+    private JRaftStateMachine fsm;
 
-    public ServiceDiscoveryServer(final String dataPath, final String groupId, final PeerId serverId,
-                                  final NodeOptions nodeOptions) throws IOException {
+    public JRaftServer(final String dataPath, final String groupId, final PeerId serverId,
+                       final NodeOptions nodeOptions) throws IOException {
         // init raft data path, it contains log,meta,snapshot
         FileUtils.forceMkdir(new File(dataPath));
 
         // here use same RPC server for raft and business. It also can be seperated generally
         final RpcServer rpcServer = RaftRpcServerFactory.createRaftRpcServer(serverId.getEndpoint());
 
-        // register business processor
-        rpcServer.registerProcessor(new RegistrationRpcProcessor(this));
-        rpcServer.registerProcessor(new GetServiceInstancesRequestRpcProcessor(this));
-        // TODO
-
         // init state machine
-        this.fsm = new ServiceDiscoveryStateMachine();
+        this.fsm = new JRaftStateMachine();
+
+        ServiceLoader<RequestProcessor> requestProcessors = ServiceLoader.load(RequestProcessor.class, getClass().getClassLoader());
+        for (RequestProcessor requestProcessor : requestProcessors) {
+            // Register RpcProcessor to RpcServer
+            rpcServer.registerProcessor(requestProcessor.adapt(this));
+            // Register RequestProcessor to FSM
+            this.fsm.registerRequestProcessor(requestProcessor);
+        }
+
         // set fsm to nodeOptions
         nodeOptions.setFsm(this.fsm);
         // set the InMemoryJRaftServiceFactory
@@ -72,7 +78,7 @@ public class ServiceDiscoveryServer {
         this.fsm.setNode(this.node);
     }
 
-    public ServiceDiscoveryStateMachine getFsm() {
+    public JRaftStateMachine getFsm() {
         return this.fsm;
     }
 
@@ -100,7 +106,7 @@ public class ServiceDiscoveryServer {
 
     public static void main(final String[] args) throws IOException {
         if (args.length != 2) {
-            String className = ServiceDiscoveryServer.class.getName();
+            String className = JRaftServer.class.getName();
             System.err.printf("Usage : %s {serverId} {initConf}\n", className);
             System.err.printf("Example: %s 127.0.0.1:8081 127.0.0.1:8081,127.0.0.1:8082,127.0.0.1:8083\n", className);
             System.exit(1);
@@ -132,7 +138,7 @@ public class ServiceDiscoveryServer {
         nodeOptions.setInitialConf(initConf);
 
         // start raft server
-        final ServiceDiscoveryServer serviceDiscoveryServer = new ServiceDiscoveryServer(dataPath, groupId, serverId, nodeOptions);
+        final JRaftServer serviceDiscoveryServer = new JRaftServer(dataPath, groupId, serverId, nodeOptions);
         System.out.println("Started counter server at port:"
                 + serviceDiscoveryServer.getNode().getNodeId().getPeerId().getPort());
         // GrpcServer need block to prevent process exit
