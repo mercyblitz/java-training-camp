@@ -37,6 +37,7 @@
         <module>zookeeper-project</module>
         <module>distributed-transaction-project</module>
         <module>rpc-project</module>
+        <module>distributed-config-project</module>
     </modules>
 
     <dependencyManagement>
