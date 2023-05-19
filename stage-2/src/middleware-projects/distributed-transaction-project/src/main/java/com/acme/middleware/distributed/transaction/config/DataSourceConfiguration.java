@@ -21,16 +21,13 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.lookup.BeanFactoryDataSourceLookup;
 import org.springframework.jdbc.datasource.lookup.DataSourceLookup;
-import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
 import java.util.Map;
@@ -42,7 +39,6 @@ import java.util.Map;
  * @since 1.0.0
  */
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties
 public class DataSourceConfiguration {
 
     @Autowired
@@ -53,8 +49,8 @@ public class DataSourceConfiguration {
      */
     @Bean
     @ConfigurationProperties(prefix = "datasources.write")
-    public DataSource writeDataSource(DataSourceProperties properties) {
-        return dataSource(properties);
+    public DataSource writeDataSource() {
+       return new HikariDataSource();
     }
 
     /**
@@ -62,8 +58,8 @@ public class DataSourceConfiguration {
      */
     @Bean
     @ConfigurationProperties(prefix = "datasources.read")
-    public DataSource readDataSource(DataSourceProperties properties) {
-        return dataSource(properties);
+    public DataSource readDataSource() {
+        return new HikariDataSource();
     }
 
     @Bean
@@ -81,17 +77,5 @@ public class DataSourceConfiguration {
     @Bean
     public BeanFactoryDataSourceLookup dataSourceLookup() {
         return new BeanFactoryDataSourceLookup();
-    }
-
-    HikariDataSource dataSource(DataSourceProperties properties) {
-        HikariDataSource dataSource = createDataSource(properties, HikariDataSource.class);
-        if (StringUtils.hasText(properties.getName())) {
-            dataSource.setPoolName(properties.getName());
-        }
-        return dataSource;
-    }
-
-    protected static <T> T createDataSource(DataSourceProperties properties, Class<? extends DataSource> type) {
-        return (T) properties.initializeDataSourceBuilder().type(type).build();
     }
 }
