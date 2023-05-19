@@ -16,13 +16,29 @@
  */
 package com.acme.middleware.distributed.transaction.service;
 
+import com.acme.middleware.distributed.transaction.jdbc.datasource.annotation.Switchable;
+import com.acme.middleware.distributed.transaction.jdbc.datasource.util.DataSourceType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
+import org.springframework.jdbc.core.StatementCallback;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.acme.middleware.distributed.transaction.jdbc.datasource.util.DataSourceType.READ;
+import static com.acme.middleware.distributed.transaction.jdbc.datasource.util.DataSourceType.resetDataSource;
 
 /**
  * 账户服务
@@ -40,6 +56,51 @@ public class UserService {
 
     @Autowired
     private TransactionMessageService transactionMessageService;
+
+    @Switchable(dataSource = READ)
+    public List<Map<String, Object>> getAllUsers() {
+        try {
+            // 切换读库
+            // DataSourceType.READ.switchDataSource();
+            return jdbcTemplate.execute(new StatementCallback<List>() {
+
+                @Override
+                public List doInStatement(Statement stmt) throws SQLException, DataAccessException {
+
+                    ResultSet resultSet = stmt.executeQuery("SELECT * FROM users");
+                    List<Map<String, Object>> result = new ArrayList<>();
+                    ResultSetMetaData metaData = resultSet.getMetaData();
+                    int columnCount = metaData.getColumnCount();
+                    while (resultSet.next()) {
+                        Map<String, Object> rowMap = new HashMap<>(columnCount);
+                        for (int i = 1; i <= columnCount; i++) {
+                            String columnName = metaData.getColumnName(i);
+                            String columnClassName = metaData.getColumnClassName(i);
+                            Object columnValue = null;
+                            switch (columnClassName) {
+                                case "java.lang.String":
+                                    columnValue = resultSet.getString(i);
+                                    break;
+                                case "java.lang.Long":
+                                    columnValue = resultSet.getLong(i);
+                                    break;
+                                case "java.lang.Integer":
+                                    columnValue = resultSet.getInt(i);
+                                    break;
+                            }
+                            rowMap.put(columnName, columnValue);
+                        }
+
+                        result.add(rowMap);
+                    }
+
+                    return result;
+                }
+            });
+        } finally {
+            // resetDataSource();
+        }
+    }
 
     @Transactional
     public boolean updateAmount(Long txId, Long sellerId, Long buyerId, Long amount) {

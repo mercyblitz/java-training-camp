@@ -16,6 +16,8 @@
  */
 package com.acme.middleware.distributed.transaction.sample.base;
 
+import com.acme.middleware.distributed.transaction.config.DataSourceConfiguration;
+import com.acme.middleware.distributed.transaction.jdbc.datasource.aspect.SwitchableAspect;
 import com.acme.middleware.distributed.transaction.service.TransactionMessageService;
 import com.acme.middleware.distributed.transaction.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -31,9 +34,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 用户（账户）服务示例
@@ -44,7 +50,11 @@ import java.time.Duration;
 @RestController
 @EnableAutoConfiguration
 @EnableTransactionManagement(proxyTargetClass = true)
-@Import({UserService.class, TransactionMessageService.class})
+@EnableAspectJAutoProxy(proxyTargetClass = true)
+@Import({UserService.class,
+        DataSourceConfiguration.class,
+        SwitchableAspect.class,
+        TransactionMessageService.class})
 public class UserServiceSample {
 
     @Autowired
@@ -73,6 +83,11 @@ public class UserServiceSample {
         applicationEventPublisher.publishEvent(ack);
     }
 
+    @GetMapping("/users")
+    public List<Map<String, Object>> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void afterComplete(Acknowledgment ack) {
         ack.acknowledge();
@@ -82,9 +97,10 @@ public class UserServiceSample {
     public void afterRollback(Acknowledgment ack) {
         ack.nack(Duration.ZERO);
     }
+
     public static void main(String[] args) {
         new SpringApplicationBuilder(UserServiceSample.class)
-                .profiles("user", "test")
+                .profiles("user", "datasources")
                 .run(args);
     }
 }
