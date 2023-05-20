@@ -1,0 +1,6 @@
+[mysqld]
+server_id=3
+binlog_format=ROW
+gtid_mode=ON
+enforce-gtid-consistency=true
+read_only=ON
