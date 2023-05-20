@@ -25,6 +25,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.lookup.BeanFactoryDataSourceLookup;
 import org.springframework.jdbc.datasource.lookup.DataSourceLookup;
@@ -39,6 +40,7 @@ import java.util.Map;
  * @since 1.0.0
  */
 @Configuration(proxyBeanMethods = false)
+@Profile("datasources")
 public class DataSourceConfiguration {
 
     @Autowired

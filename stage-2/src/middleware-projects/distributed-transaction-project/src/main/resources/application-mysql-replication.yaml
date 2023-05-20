@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:mysql:replication://127.0.0.1:13306,127.0.0.1:13307,127.0.0.1:13308/test_db?autoReconnect=true&roundRobinLoadBalance=true
+    user-name: root
+    password: 123456
