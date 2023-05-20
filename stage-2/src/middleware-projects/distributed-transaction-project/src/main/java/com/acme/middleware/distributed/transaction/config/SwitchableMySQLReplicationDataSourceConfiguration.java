@@ -14,24 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.acme.middleware.distributed.transaction.jdbc.datasource;
+package com.acme.middleware.distributed.transaction.config;
 
-import com.acme.middleware.distributed.transaction.jdbc.datasource.util.DataSourceType;
-import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
+import com.acme.middleware.distributed.transaction.jdbc.SwitchableMySQLReplicationDataSource;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import javax.sql.DataSource;
 
 /**
- * 动态 {@link DataSource} 实现
+ * 可切换 MySQL 复制 {@link DataSource} 配置类
  *
  * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
+ * @see SwitchableMySQLReplicationDataSource
  * @since 1.0.0
  */
-public class DynamicDataSource extends AbstractRoutingDataSource {
+@Profile("mysql-replication")
+@Configuration(proxyBeanMethods = false)
+public class SwitchableMySQLReplicationDataSourceConfiguration implements BeanPostProcessor {
 
     @Override
-    protected Object determineCurrentLookupKey() {
-        return DataSourceType.getDataSourceBeanName();
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        if (bean instanceof DataSource) {
+            return new SwitchableMySQLReplicationDataSource((DataSource) bean);
+        }
+        return bean;
     }
-
 }

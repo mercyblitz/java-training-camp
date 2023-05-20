@@ -16,7 +16,8 @@
  */
 package com.acme.middleware.distributed.transaction.sample.base;
 
-import com.acme.middleware.distributed.transaction.config.DataSourceConfiguration;
+import com.acme.middleware.distributed.transaction.config.DynamicDataSourceConfiguration;
+import com.acme.middleware.distributed.transaction.config.SwitchableMySQLReplicationDataSourceConfiguration;
 import com.acme.middleware.distributed.transaction.jdbc.datasource.aspect.SwitchableAspect;
 import com.acme.middleware.distributed.transaction.service.TransactionMessageService;
 import com.acme.middleware.distributed.transaction.service.UserService;
@@ -52,7 +53,8 @@ import java.util.Map;
 @EnableTransactionManagement(proxyTargetClass = true)
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @Import({UserService.class,
-        DataSourceConfiguration.class,
+        DynamicDataSourceConfiguration.class,
+        SwitchableMySQLReplicationDataSourceConfiguration.class,
         SwitchableAspect.class,
         TransactionMessageService.class})
 public class UserServiceSample {

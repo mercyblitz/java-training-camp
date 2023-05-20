@@ -41,7 +41,7 @@ import java.util.Map;
  */
 @Configuration(proxyBeanMethods = false)
 @Profile("datasources")
-public class DataSourceConfiguration {
+public class DynamicDataSourceConfiguration {
 
     @Autowired
     private Environment environment;

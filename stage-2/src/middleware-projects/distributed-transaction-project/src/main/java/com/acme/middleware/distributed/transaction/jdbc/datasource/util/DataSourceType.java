@@ -16,9 +16,8 @@
  */
 package com.acme.middleware.distributed.transaction.jdbc.datasource.util;
 
-import com.acme.middleware.distributed.transaction.jdbc.datasource.DynamicDataSource;
-
 import javax.sql.DataSource;
+import java.util.Objects;
 
 /**
  * {@link DataSource} 类型
@@ -40,19 +39,36 @@ public enum DataSourceType {
 
     private final String beanName;
 
+    private final static ThreadLocal<String> dataSourceBeanNameHolder = ThreadLocal.withInitial(() -> null);
+
     DataSourceType(String beanName) {
         this.beanName = beanName;
     }
 
-    public String getBeanName() {
-        return beanName;
+    public void switchDataSource() {
+        dataSourceBeanNameHolder.set(beanName);
     }
 
-    public void switchDataSource() {
-        DynamicDataSource.setDataSourceBeanName(getBeanName());
+    public static DataSourceType current() {
+        String beanName = getDataSourceBeanName();
+        if (beanName == null) {
+            return null;
+        }
+        DataSourceType current = null;
+        for (DataSourceType type : DataSourceType.values()) {
+            if (Objects.equals(beanName, type.beanName)) {
+                current = type;
+                break;
+            }
+        }
+        return current;
+    }
+
+    public static String getDataSourceBeanName() {
+        return dataSourceBeanNameHolder.get();
     }
 
     public static void resetDataSource() {
-        DynamicDataSource.clearDataSourceBeanName();
+        dataSourceBeanNameHolder.remove();
     }
 }
