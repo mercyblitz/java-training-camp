@@ -102,7 +102,7 @@ public class UserServiceSample {
 
     public static void main(String[] args) {
         new SpringApplicationBuilder(UserServiceSample.class)
-                .profiles("user", "datasources")
+                .profiles("user", "mysql-replication")
                 .run(args);
     }
 }

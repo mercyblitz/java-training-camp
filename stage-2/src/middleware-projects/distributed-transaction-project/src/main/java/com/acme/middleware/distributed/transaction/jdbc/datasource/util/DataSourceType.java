@@ -51,14 +51,13 @@ public enum DataSourceType {
 
     public static DataSourceType current() {
         String beanName = getDataSourceBeanName();
-        if (beanName == null) {
-            return null;
-        }
-        DataSourceType current = null;
-        for (DataSourceType type : DataSourceType.values()) {
-            if (Objects.equals(beanName, type.beanName)) {
-                current = type;
-                break;
+        DataSourceType current = DataSourceType.WRITE;
+        if (beanName != null) {
+            for (DataSourceType type : DataSourceType.values()) {
+                if (Objects.equals(beanName, type.beanName)) {
+                    current = type;
+                    break;
+                }
             }
         }
         return current;
