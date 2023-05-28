@@ -38,6 +38,7 @@
         <module>distributed-transaction-project</module>
         <module>rpc-project</module>
         <module>distributed-config-project</module>
+        <module>distributed-cache-project</module>
     </modules>
 
     <dependencyManagement>
