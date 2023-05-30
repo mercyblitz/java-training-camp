@@ -2,8 +2,6 @@
 
 ## [[本期报名]](https://mqu.h5.xeknow.com/s/1I2W75a)
 
-## [[二期报名]](https://mqu.xet.tech/s/1UDiMh)
-
 ## [[福利报名]](https://github.com/mercyblitz/java-training-camp/blob/main/README.md#%E6%8A%A5%E5%90%8D%E7%A6%8F%E5%88%A9)
 
 # 课程详情
