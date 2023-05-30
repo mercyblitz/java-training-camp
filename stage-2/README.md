@@ -1,22 +1,10 @@
 <a name="tUQU7"></a>
 # 报名信息
-<a name="JykoE"></a>
+
 ## [[本期报名]](https://mqu.xet.tech/s/1UDiMh)
-<a name="rZMSW"></a>
-## [[一期报名]](https://mqu.h5.xeknow.com/s/1I2W75a)
-<a name="fzBtS"></a>
-## 课程福利
-为感谢长期对小马哥信任和支持的小伙伴，曾报名以下任一课程： 
 
-- SF（思否）
-   - Spring Boot/Spring Cloud  系列
-   - 《一入 Java 深似海》系列
-- 极客时间
-   - Spring 编程思想（核心 + AOP）
-   - 小马哥 Java 训练营 0 期
-   - 小马哥 Java 训练营 1 期
+## [[福利报名]](https://github.com/mercyblitz/java-training-camp/blob/main/README.md#%E6%8A%A5%E5%90%8D%E7%A6%8F%E5%88%A9)
 
-报名本系列后，可返现 100 元，若报名多个系列，返现可叠加，最高返现 500元。<br />若小伙伴极客时间的课程全报名过，可选择返现 300 元或免费获取 SF（思否）全套课程。<br />由于人数较多，请小伙伴在第三节课后，找小马哥，告知报名信息，返现将从支付渠道返回。
 <a name="UpMpa"></a>
 # 课程详情
 <a name="gbc9o"></a>
