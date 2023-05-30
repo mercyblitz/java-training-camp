@@ -9,7 +9,7 @@
 ## [[本期报名]](https://mqu.xet.tech/s/9PPWG)
 <a name="W5kN1"></a>
 
-## [其他报名](https://github.com/mercyblitz/java-training-camp/blob/main/README.md#%E6%8A%A5%E5%90%8D%E7%A6%8F%E5%88%A9)
+## [[福利报名]](https://github.com/mercyblitz/java-training-camp/blob/main/README.md#%E6%8A%A5%E5%90%8D%E7%A6%8F%E5%88%A9)
 
 <a name="MMln1"></a>
 ## 
