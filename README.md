@@ -22,17 +22,17 @@
 
 # 课程大纲
 
-## [第一期 Java 分布式架构 - 服务治理](stage-1)
-## [第二期 Java 分布式架构 - 通用模式](stage-2)
-## [第三期 Java 分布式架构 - 高并发、高性能与高可用](stage-3)
-## 第四期 Java 分布式架构 - 异地多活架构（TODO）
+## [第一期 Java 分布式架构 - 服务治理](stage-1)（[**报名**](https://mqu.h5.xeknow.com/s/1I2W75a) ）
+## [第二期 Java 分布式架构 - 通用模式](stage-2)（[**报名**](https://mqu.xet.tech/s/9PPWG) ）
+## [第三期 Java 分布式架构 - 高并发、高性能与高可用](stage-3)（[**报名**](https://mqu.xet.tech/s/9PPWG) ）
+## 第四期 Java 分布式架构 - 异地多活架构（TODO）（[**报名**](https://mqu.xet.tech/s/30AIub) ）
 
 # 报名福利
 
-## [超级会员](https://mqu.xet.tech/s/3GN2Xy)
+## [超级会员](https://mqu.xet.tech/s/3GN2Xy) （[**报名**](https://mqu.xet.tech/s/3GN2Xy)）
 
 内容包括：
-- [第一期 Java 分布式架构 - 服务治理](https://mqu.h5.xeknow.com/s/1I2W75a)
+- [第一期 Java 分布式架构 - 服务治理](https://mqu.h5.xeknow.com/s/1I2W75a) 
 - [第二期 Java 分布式架构 - 通用模式](https://mqu.xet.tech/s/9PPWG)
 - [第三期 Java 分布式架构 - 高并发、高性能与高可用](https://mqu.xet.tech/s/9PPWG)
 - [第四期 Java 分布式架构 - 异地多活架构](https://mqu.xet.tech/s/30AIub)
@@ -42,8 +42,6 @@
 原价：23996 元，优惠价：11996 元，打包价：7999（每期不超过 2000元）
 
 若过去报名过任一期的训练营，购买超级会员后，小马哥将在后台退还之前的报名实际费用，相当于补差价
-
-[**点击报名**](https://mqu.xet.tech/s/3GN2Xy)
 
 
 ## 单期报名
