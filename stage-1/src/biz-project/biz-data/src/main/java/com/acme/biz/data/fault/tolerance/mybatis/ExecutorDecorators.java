@@ -44,8 +44,19 @@ public class ExecutorDecorators implements Executor {
 
     public ExecutorDecorators(Executor delegate, List<ExecutorDecorator> decorators) {
         this.decorators = decorators;
-        this.decorators.forEach(decorator -> decorator.setDelegate(delegate));
+//        this.decorators.forEach(decorator -> decorator.setDelegate(delegate));
         this.lastIndex = decorators.size() - 1;
+
+        boolean originalDelegate;
+        for (int i = lastIndex; i > -1; i--) {
+            ExecutorDecorator executorDecorator =  this.decorators.get(i);
+            if (i == lastIndex) {
+                originalDelegate = true;
+            } else {
+                originalDelegate = false;
+            }
+            delegate = executorDecorator.setDelegate(delegate, originalDelegate);
+        }
     }
 
     @Override
