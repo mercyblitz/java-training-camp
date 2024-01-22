@@ -41,18 +41,32 @@ public abstract class ExecutorDecorator implements Executor {
 
     private Executor delegate;
 
+    /**
+     * 当前 delegate 是否为最原始的被包装对象
+     */
+    private boolean originalDelegate;
+
     public ExecutorDecorator() {
     }
 
-    public void setDelegate(Executor delegate) {
+    /**
+     * 包装 Executor
+     * @param delegate 被包装对象
+     * @param originalDelegate  当前 delegate 是否为最原始的被包装对象
+     */
+    public Executor setDelegate(Executor delegate, boolean originalDelegate) {
         this.delegate = delegate;
+        this.originalDelegate = originalDelegate;
+        return this;
     }
 
     protected <R> R doInDelegate(MappedStatement ms, CheckedFunction0<R> action) throws SQLException {
         R result = null;
         before(ms);
         try {
-            result = action.apply();
+            if (originalDelegate) {
+                result = action.apply();
+            }
         } catch (Throwable e) {
             if (e instanceof SQLException) {
                 throw (SQLException) e;
