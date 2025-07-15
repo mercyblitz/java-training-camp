@@ -71,3 +71,4 @@ build.txt
 # Projects
 .service-discovery
 echoService
+.env
