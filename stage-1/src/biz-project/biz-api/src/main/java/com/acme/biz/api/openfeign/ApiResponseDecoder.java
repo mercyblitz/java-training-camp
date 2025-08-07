@@ -48,7 +48,7 @@ public class ApiResponseDecoder implements Decoder {
         String contentType = getContentType(response);
         MediaType mediaType = MediaType.parseMediaType(contentType);
         String version = mediaType.getParameter("v");
-        if (version == null) {
+        if (version == null || "3".equals(version)) {
             Object object = decoder.decode(response, ApiResponse.class);
             if (object instanceof ApiResponse) {
                 return ApiResponse.class.cast(object).getBody();
@@ -58,7 +58,7 @@ public class ApiResponseDecoder implements Decoder {
     }
 
     private String getContentType(Response response) {
-        Collection<String> types = response.headers().getOrDefault("Content-Type", Arrays.asList("application/json;v=3"));
+        Collection<String> types = response.request().headers().getOrDefault("Accept", Arrays.asList("application/json;v=3"));
         return types.iterator().next();
     }
 }
